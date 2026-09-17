@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using ApplicationCore.Interfaces;
 using Infrastructure.Contexts;
 
 namespace Infrastructure.Repositories;
