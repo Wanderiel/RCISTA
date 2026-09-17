@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="Application/Application.csproj" Id="9846e976-ecca-4094-83ff-01470dc520af" />
   <Project Path="AppWPF/AppWPF.csproj" />
+  <Project Path="Domain/Domain.csproj" Id="1af02433-0230-4e92-8345-ad069c31d39f" />
+  <Project Path="Infrastructure/Infrastructure.csproj" Id="6df951cf-f958-42f1-83c8-a5221c2708c2" />
 </Solution>
