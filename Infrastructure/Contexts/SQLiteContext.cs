@@ -5,8 +5,6 @@ namespace Infrastructure.Contexts;
 
 public class SQLiteContext : DbContext, IUnitOfWork
 {
-    public SQLiteContext(DbContextOptions<SQLiteContext> options) : base(options)
-    {
+    public SQLiteContext(DbContextOptions<SQLiteContext> options) : base(options) =>
         Database.EnsureCreated();
-    }
 }

@@ -1,0 +1,55 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain.Models.NPMs;
+
+public class NonPaperMedia
+{
+    public NonPaperMedia(int id, string type, string manufacturer, string serialNumber, int capacity)
+    {
+        Id = id;
+        Type = type;
+        Manufacturer = manufacturer;
+        SerialNumber = serialNumber;
+        Capacity = capacity;
+    }
+
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; private set; }
+    [Required]
+    public string Type { get; private set; }
+    [Required, StringLength(50)]
+    public string Manufacturer { get; private set; }
+    [Required, StringLength(100)]
+    public string SerialNumber { get; private set; }
+    [Required]
+    public int Capacity { get; private set; }
+
+    public void UpdateType(string type)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(type, nameof(type));
+
+        Type = type;
+    }
+
+    public void UpdateManufacturer(string manufacturer)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(manufacturer, nameof(manufacturer));
+
+        Manufacturer = manufacturer;
+    }
+
+    public void UpdateSerialNumber(string serialNumber)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(serialNumber, nameof(serialNumber));
+
+        SerialNumber = serialNumber;
+    }
+
+    public void UpdateCapacity(int capacity)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(capacity, nameof(capacity));
+
+        Capacity = capacity;
+    }
+}
