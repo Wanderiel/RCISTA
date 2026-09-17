@@ -10,4 +10,17 @@ public class SQLiteContext : DbContext, IUnitOfWork
         Database.EnsureCreated();
 
     public DbSet<NonPaperMedia> NonPaperMedias { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<NonPaperMedia>(builder =>
+        {
+            builder.Property(p => p.Id)
+            .HasConversion(
+                npmId => npmId.Value,
+                npmId => new NpmId(npmId));
+        });
+
+        base.OnModelCreating(modelBuilder);
+    }
 }

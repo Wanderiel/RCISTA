@@ -5,7 +5,7 @@ namespace Domain.Models.NPMs;
 
 public class NonPaperMedia
 {
-    public NonPaperMedia(int id, string type, string manufacturer, string serialNumber, int capacity)
+    public NonPaperMedia(NpmId id, string type, string manufacturer, string serialNumber, int capacity)
     {
         Id = id;
         Type = type;
@@ -15,7 +15,7 @@ public class NonPaperMedia
     }
 
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; private set; }
+    public NpmId Id { get; private set; }
     [Required]
     public string Type { get; private set; }
     [Required, StringLength(50)]
