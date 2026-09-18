@@ -1,10 +1,10 @@
-﻿namespace Domain.Models.NPMs;
+﻿namespace Domain.Models.Users;
 
-public struct NpmId
+public struct UserId
 {
     private readonly int _id;
 
-    public NpmId(int id) =>
+    public UserId(int id) =>
         _id = id;
 
     public int Value => _id;
