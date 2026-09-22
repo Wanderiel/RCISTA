@@ -1,5 +1,7 @@
 ﻿using ApplicationCore.Interfaces;
 using Domain.Models.NPMs;
+using Domain.Models.Users;
+using Domain.Models.Workstations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Contexts;
@@ -9,6 +11,8 @@ public class SQLiteContext : DbContext, IUnitOfWork
     public SQLiteContext(DbContextOptions<SQLiteContext> options) : base(options) =>
         Database.EnsureCreated();
 
+    public DbSet<User> Users { get; set; }
+    public DbSet<Workstation> Workstations { get; set; }
     public DbSet<NonPaperMedia> NonPaperMedias { get; set; }
 
     public override int SaveChanges()
@@ -27,6 +31,22 @@ public class SQLiteContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>(builder =>
+        {
+            builder.Property(p => p.Id)
+            .HasConversion(
+                userId => userId.Value,
+                userId => new UserId(userId));
+        });
+
+        modelBuilder.Entity<Workstation>(builder =>
+        {
+            builder.Property(p => p.Id)
+            .HasConversion(
+                workstationId => workstationId.Value,
+                workstationId => new WorkstationId(workstationId));
+        });
+
         modelBuilder.Entity<NonPaperMedia>(builder =>
         {
             builder.Property(p => p.Id)
