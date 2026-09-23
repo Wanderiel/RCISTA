@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Services;
+﻿using ApplicationCore.Dtos.NPMs;
+using ApplicationCore.Services;
 using Domain.Models.NPMs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,21 +9,29 @@ namespace WebApp.Controllers;
 [Route("[controller]")]
 public class NonPaperMediaController : Controller
 {
-    private readonly NonPaperMediaService _npmService;
+    private readonly NonPaperMediaService _service;
 
     public NonPaperMediaController(NonPaperMediaService npmService)
     {
-        _npmService = npmService;
+        _service = npmService;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] CreatedNPMdto dto)
+    {
+        await _service.Create(dto);
+
+        return Ok();
     }
 
     [HttpGet]
     public async Task<List<NonPaperMedia>> GetAll() =>
-        await _npmService.GetAllAsync();
+        await _service.GetAllAsync();
 
     [HttpGet("{id}")]
     public async Task<ActionResult<NonPaperMedia>> Get(int id)
     {
-        NonPaperMedia? nonPaperMedia = await _npmService.GetAsync(id);
+        NonPaperMedia? nonPaperMedia = await _service.GetAsync(id);
 
         if (nonPaperMedia == null)
             return NotFound();
@@ -33,7 +42,7 @@ public class NonPaperMediaController : Controller
     [HttpDelete]
     public async Task<IActionResult> Delete(int id)
     {
-        bool result = await _npmService.DeleteAsync(id);
+        bool result = await _service.DeleteAsync(id);
 
         if (result == false)
             return NotFound();

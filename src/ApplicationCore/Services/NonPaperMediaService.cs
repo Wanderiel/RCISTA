@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Dtos.NPMs;
+using ApplicationCore.Interfaces;
 using Domain.Models.NPMs;
 
 namespace ApplicationCore.Services;
@@ -12,6 +13,13 @@ public class NonPaperMediaService
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
+    }
+
+    public async Task Create(CreatedNPMdto dto)
+    {
+        NonPaperMedia nonPaperMedia = new NonPaperMedia(dto.Type, dto.Manufacturer, dto.Model, dto.SerialNumber, dto.Capacity);
+        _repository.Insert(nonPaperMedia);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<List<NonPaperMedia>> GetAllAsync()

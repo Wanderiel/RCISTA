@@ -5,11 +5,11 @@ namespace Domain.Models.NPMs;
 
 public class NonPaperMedia
 {
-    public NonPaperMedia(NpmId id, string type, string manufacturer, string serialNumber, int capacity)
+    public NonPaperMedia(string type, string manufacturer, string model, string serialNumber, int capacity)
     {
-        Id = id;
         Type = type;
         Manufacturer = manufacturer;
+        Model = model;
         SerialNumber = serialNumber;
         Capacity = capacity;
     }
@@ -20,6 +20,8 @@ public class NonPaperMedia
     public string Type { get; private set; }
     [Required, StringLength(50)]
     public string Manufacturer { get; private set; }
+    [Required, StringLength(50)]
+    public string Model { get; private set; }
     [Required, StringLength(100)]
     public string SerialNumber { get; private set; }
     [Required]
