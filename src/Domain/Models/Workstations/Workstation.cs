@@ -1,4 +1,6 @@
 ﻿using Domain.Models.NPMs;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.Workstations;
 
@@ -15,7 +17,9 @@ public class Workstation
         _disks = disks;
     }
 
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public WorkstationId Id { get; }
+    [Required, StringLength(50)]
     public string Inventory { get; }
     public IReadOnlyList<NonPaperMedia> Disks => _disks;
 
