@@ -37,6 +37,18 @@ public class SQLiteContext : DbContext, IUnitOfWork
             .HasConversion(
                 userId => userId.Value,
                 userId => new UserId(userId));
+
+            builder.OwnsOne(
+                user => user.FullName,
+                fullName =>
+                {
+                    fullName.Property(p => p.FirstName).HasColumnName("FirstName");
+                    fullName.Property(p => p.LastName).HasColumnName("LastName");
+                    fullName.Property(p => p.Patronymic).HasColumnName("Patronymic");
+                });
+
+            builder.HasIndex(u => u.Login)
+            .IsUnique();
         });
 
         modelBuilder.Entity<Workstation>(builder =>
@@ -45,6 +57,9 @@ public class SQLiteContext : DbContext, IUnitOfWork
             .HasConversion(
                 workstationId => workstationId.Value,
                 workstationId => new WorkstationId(workstationId));
+
+            builder.HasIndex(w => w.Inventory)
+            .IsUnique();
         });
 
         modelBuilder.Entity<NonPaperMedia>(builder =>
@@ -53,6 +68,9 @@ public class SQLiteContext : DbContext, IUnitOfWork
             .HasConversion(
                 npmId => npmId.Value,
                 npmId => new NpmId(npmId));
+
+            builder.HasIndex(npm => npm.SerialNumber)
+            .IsUnique();
         });
 
         base.OnModelCreating(modelBuilder);
