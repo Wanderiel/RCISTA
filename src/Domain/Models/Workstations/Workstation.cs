@@ -10,9 +10,8 @@ public class Workstation
 
     private Workstation() { }
 
-    public Workstation(WorkstationId id, string inventory, List<NonPaperMedia> disks)
+    public Workstation(string inventory, List<NonPaperMedia> disks)
     {
-        Id = id;
         Inventory = inventory;
         _disks = disks;
     }
