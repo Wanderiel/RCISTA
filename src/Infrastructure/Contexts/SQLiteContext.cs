@@ -34,9 +34,9 @@ public class SQLiteContext : DbContext, IUnitOfWork
         modelBuilder.Entity<User>(builder =>
         {
             builder.Property(p => p.Id)
-            .HasConversion(
-                userId => userId.Value,
-                userId => new UserId(userId));
+                .HasConversion(
+                    userId => userId.Value,
+                    userId => new UserId(userId));
 
             builder.OwnsOne(
                 user => user.FullName,
@@ -48,29 +48,34 @@ public class SQLiteContext : DbContext, IUnitOfWork
                 });
 
             builder.HasIndex(u => u.Login)
-            .IsUnique();
+                .IsUnique();
         });
 
         modelBuilder.Entity<Workstation>(builder =>
         {
             builder.Property(p => p.Id)
-            .HasConversion(
-                workstationId => workstationId.Value,
-                workstationId => new WorkstationId(workstationId));
+                .HasConversion(
+                    workstationId => workstationId.Value,
+                    workstationId => new WorkstationId(workstationId));
 
             builder.HasIndex(w => w.Inventory)
-            .IsUnique();
+                .IsUnique();
+
+            builder.HasMany(w => w.Disks)
+                .WithOne()
+                .HasForeignKey()
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<NonPaperMedia>(builder =>
         {
             builder.Property(p => p.Id)
-            .HasConversion(
-                npmId => npmId.Value,
-                npmId => new NpmId(npmId));
+                .HasConversion(
+                    npmId => npmId.Value,
+                    npmId => new NpmId(npmId));
 
             builder.HasIndex(npm => npm.SerialNumber)
-            .IsUnique();
+                .IsUnique();
         });
 
         base.OnModelCreating(modelBuilder);

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Models.Users;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.NPMs;
@@ -26,6 +27,8 @@ public class NonPaperMedia
     public string SerialNumber { get; private set; }
     [Required]
     public int Capacity { get; private set; }
+    public UserId AutorId { get; private set; }
+    public UserId ChangedId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
