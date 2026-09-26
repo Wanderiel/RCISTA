@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Interfaces;
+using Domain.Interfaces;
 using Domain.Models.NPMs;
 using Domain.Models.Users;
 using Domain.Models.Workstations;
@@ -17,14 +18,14 @@ public class SQLiteContext : DbContext, IUnitOfWork
 
     public override int SaveChanges()
     {
-        SetTimestampsForUsers();
+        SetTimestamps();
 
         return base.SaveChanges();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        SetTimestampsForUsers();
+        SetTimestamps();
 
         return await base.SaveChangesAsync(cancellationToken);
     }
@@ -63,7 +64,7 @@ public class SQLiteContext : DbContext, IUnitOfWork
 
             builder.HasMany(w => w.Disks)
                 .WithOne()
-                .HasForeignKey()
+                .HasForeignKey("WorkstationId")
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -81,9 +82,24 @@ public class SQLiteContext : DbContext, IUnitOfWork
         base.OnModelCreating(modelBuilder);
     }
 
-    private void SetTimestampsForUsers()
+    private void SetTimestamps()
     {
-        var modifiedEntities = ChangeTracker.Entries<NonPaperMedia>()
+        SetTimestampForAdded();
+        SetTimestampForMidified();
+    }
+
+    private void SetTimestampForAdded()
+    {
+        var modifiedEntities = ChangeTracker.Entries<IChangedAt>()
+            .Where(e => e.State == EntityState.Added);
+
+        foreach (var entry in modifiedEntities)
+            entry.Property(e => e.CreatedAt).CurrentValue = DateTime.UtcNow;
+    }
+
+    private void SetTimestampForMidified()
+    {
+        var modifiedEntities = ChangeTracker.Entries<IChangedAt>()
             .Where(e => e.State == EntityState.Modified);
 
         foreach (var entry in modifiedEntities)

@@ -21,7 +21,7 @@ public class NonPaperMediaController : Controller
     {
         await _service.Create(dto);
 
-        return Ok();
+        return Created();
     }
 
     [HttpGet]

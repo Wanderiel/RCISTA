@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.Users;
 
-public class User
+public class User : IChangedAt
 {
     private User() { }
 
@@ -19,8 +20,8 @@ public class User
     public FullName FullName { get; private set; }
     [Required, StringLength(20)]
     public string Login { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public void UpdateFullName(FullName fullName)
     {
