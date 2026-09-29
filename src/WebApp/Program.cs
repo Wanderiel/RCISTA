@@ -1,8 +1,11 @@
 using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
+using FluentValidation;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories;
+using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Validators;
 
 const string PROFILE_LOCAL = "local";
 
@@ -22,11 +25,14 @@ builder.Services.AddDbContext<IUnitOfWork, SQLiteContext>(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IUserLookup, UserLookupService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IWorkstationRepository, WorkstationRepository>();
 builder.Services.AddScoped<WorkstationService>();
 builder.Services.AddScoped<INonPaperMediaRepository, NonPaperMediaRepository>();
 builder.Services.AddScoped<NonPaperMediaService>();
-
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 
 var app = builder.Build();
 
