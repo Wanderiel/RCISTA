@@ -8,10 +8,11 @@ public class User : IChangedAt
 {
     private User() { }
 
-    public User(FullName fullName, string login)
+    public User(string login, FullName fullName, string passwordHash)
     {
-        FullName = fullName;
         Login = login;
+        FullName = fullName;
+        PasswordHash = passwordHash;
     }
 
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,6 +21,7 @@ public class User : IChangedAt
     public FullName FullName { get; private set; }
     [Required, StringLength(20)]
     public string Login { get; private set; }
+    public string PasswordHash { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
