@@ -10,10 +10,10 @@ namespace WebApp.Controllers;
 [Route("[controller]")]
 public class AuthController : Controller
 {
-    private readonly AuthService _authService;
+    private readonly AuthService _service;
 
     public AuthController(AuthService authService) =>
-        _authService = authService;
+        _service = authService;
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisteredUserDto userDto, [FromServices] IValidator<RegisteredUserDto> validator)
@@ -23,7 +23,7 @@ public class AuthController : Controller
         if (validationResult.IsValid == false)
             return UnprocessableEntity(validationResult.Errors);
 
-        await _authService.Register(userDto);
+        await _service.Register(userDto);
 
         return Ok();
     }
@@ -31,7 +31,7 @@ public class AuthController : Controller
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserDto loginUser)
     {
-        if (await _authService.Login(loginUser) == false)
+        if (await _service.Login(loginUser) == false)
             return BadRequest("Неверное имя пользователя или пароль.");
 
         return Ok("Добро пожаловать!");
