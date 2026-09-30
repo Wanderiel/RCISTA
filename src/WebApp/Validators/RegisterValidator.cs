@@ -14,15 +14,18 @@ public class RegisterValidator : AbstractValidator<RegisteredUserDto>
     public RegisterValidator(IUserLookup userLookup)
     {
         RuleFor(x => x.Login)
-            .NotEmpty().WithMessage("Имя пользователя не может быть пустым.")
-            .MinimumLength(MinimumLengthUsername).WithMessage($"Имя пользователя должно содержать минимум {MinimumLengthUsername} символа.")
-            .MustAsync(IsLoginAvailable).WithMessage("Имя пользователя уже занято, придумайте другое.");
+            .NotEmpty().WithMessage("Логин пользователя не может быть пустым.")
+            .MinimumLength(MinimumLengthUsername).WithMessage($"Логин пользователя должен содержать минимум {MinimumLengthUsername} символа.")
+            .MustAsync(IsLoginAvailable).WithMessage("Логин пользователя уже занят, придумайте другой.");
 
         RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("Имя не может быть пустым.");
 
         RuleFor(x => x.LastName)
             .NotEmpty().WithMessage("Фамилия не может быть пустой.");
+
+        RuleFor(x => x.Patronymic)
+            .NotEmpty().WithMessage("Отчество не может быть пустым.");
 
         RuleFor(x => x.Password1)
             .NotEmpty().WithMessage("Пароль не может быть пустым.")
