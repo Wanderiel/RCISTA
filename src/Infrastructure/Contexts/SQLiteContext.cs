@@ -59,7 +59,7 @@ public class SQLiteContext : DbContext, IUnitOfWork
                     workstationId => workstationId.Value,
                     workstationId => new WorkstationId(workstationId));
 
-            builder.HasIndex(w => w.Inventory)
+            builder.HasIndex(w => w.InventoryNumber)
                 .IsUnique();
 
             builder.HasMany(w => w.Disks)
