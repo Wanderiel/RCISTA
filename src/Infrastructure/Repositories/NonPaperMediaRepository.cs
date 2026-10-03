@@ -12,8 +12,8 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
     public NonPaperMediaRepository(SQLiteContext context) =>
         _context = context;
 
-    public void Delete(NonPaperMedia nonPaper) =>
-        _context.NonPaperMedias.Remove(nonPaper);
+    public void Insert(NonPaperMedia nonPaperMedia) =>
+        _context.NonPaperMedias.Add(nonPaperMedia);
 
     public async Task<List<NonPaperMedia>> GetAllAsync() =>
         await _context.NonPaperMedias.ToListAsync();
@@ -21,6 +21,6 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
     public async Task<NonPaperMedia?> GetByIdAsync(NpmId id) =>
         await _context.NonPaperMedias.FindAsync(id);
 
-    public void Insert(NonPaperMedia nonPaperMedia) =>
-        _context.NonPaperMedias.Add(nonPaperMedia);
+    public void Delete(NonPaperMedia nonPaper) =>
+        _context.NonPaperMedias.Remove(nonPaper);
 }
