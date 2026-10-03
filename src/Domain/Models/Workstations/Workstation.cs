@@ -17,7 +17,7 @@ public class Workstation : IChangedAt
     [Required, StringLength(50)]
     public string InventoryNumber { get; private set; }
     [Required]
-    public bool IsDecommissioned { get; private set; }
+    public bool IsDecommissioned { get; private set; } = false;
     //public UserId AutorId { get; private set; }
     //public UserId ChangedId { get; private set; }
     public DateTime CreatedAt { get; set; }

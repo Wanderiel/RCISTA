@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Services;
+﻿using ApplicationCore.Dtos.WorkStations;
+using ApplicationCore.Services;
 using Domain.Models.Workstations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,14 @@ public class WorkstationController : Controller
 
     public WorkstationController(WorkstationService service) =>
         _service = service;
+
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] CreatedWorkstationDto dto)
+    {
+        await _service.Create(dto);
+
+        return Created();
+    }
 
     [HttpGet]
     public async Task<List<Workstation>> GetAll() =>

@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Interfaces;
+﻿using ApplicationCore.Dtos.WorkStations;
+using ApplicationCore.Interfaces;
 using Domain.Models.Workstations;
 
 namespace ApplicationCore.Services;
@@ -12,6 +13,13 @@ public class WorkstationService
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
+    }
+
+    public async Task Create(CreatedWorkstationDto workstationDto)
+    {
+        Workstation workstation = new Workstation(workstationDto.InventoryNumber);
+        _repository.Insert(workstation);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<List<Workstation>> GetAllAsync()
