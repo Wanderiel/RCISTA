@@ -11,10 +11,8 @@ public class NonPaperMediaController : Controller
 {
     private readonly NonPaperMediaService _service;
 
-    public NonPaperMediaController(NonPaperMediaService npmService)
-    {
+    public NonPaperMediaController(NonPaperMediaService npmService) =>
         _service = npmService;
-    }
 
     [HttpPost]
     public async Task<ActionResult> Create([FromBody] CreatedNPMdto dto)
@@ -46,6 +44,17 @@ public class NonPaperMediaController : Controller
 
         if (result == false)
             return NotFound();
+
+        return Ok();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdatedNPMDto npmDto)
+    {
+        bool result = await _service.UpdateAsync(id, npmDto);
+
+        if (result == false)
+            return BadRequest();
 
         return Ok();
     }
