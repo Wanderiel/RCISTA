@@ -28,7 +28,7 @@ public class NonPaperMedia : IChangedAt
     [Required]
     public int Capacity { get; private set; }
     [Required]
-    public bool IsBroken { get; private set; }
+    public bool IsBroken { get; private set; } = false;
     //public UserId AutorId { get; private set; }
     //public UserId ChangedId { get; private set; }
     public DateTime CreatedAt { get; set; }

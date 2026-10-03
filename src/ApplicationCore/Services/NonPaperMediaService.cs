@@ -18,7 +18,6 @@ public class NonPaperMediaService
     public async Task Create(CreatedNPMdto dto)
     {
         NonPaperMedia nonPaperMedia = new NonPaperMedia(dto.Type, dto.Manufacturer, dto.Model, dto.SerialNumber, dto.Capacity);
-        nonPaperMedia.Repair();
         _repository.Insert(nonPaperMedia);
         await _unitOfWork.SaveChangesAsync();
     }
