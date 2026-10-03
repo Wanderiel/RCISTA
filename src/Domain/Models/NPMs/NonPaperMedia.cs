@@ -27,6 +27,8 @@ public class NonPaperMedia : IChangedAt
     public string SerialNumber { get; private set; }
     [Required]
     public int Capacity { get; private set; }
+    [Required]
+    public bool IsBroken { get; private set; }
     //public UserId AutorId { get; private set; }
     //public UserId ChangedId { get; private set; }
     public DateTime CreatedAt { get; set; }
@@ -46,6 +48,13 @@ public class NonPaperMedia : IChangedAt
         Manufacturer = manufacturer;
     }
 
+    public void UpdateModel(string model)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(model, nameof(model));
+
+        Model = model;
+    }
+
     public void UpdateSerialNumber(string serialNumber)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(serialNumber, nameof(serialNumber));
@@ -59,4 +68,10 @@ public class NonPaperMedia : IChangedAt
 
         Capacity = capacity;
     }
+
+    public void ToBreak() =>
+        IsBroken = true;
+
+    public void Repair() =>
+        IsBroken = false;
 }
