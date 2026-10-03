@@ -21,7 +21,10 @@ public class User : IChangedAt
     public FullName FullName { get; private set; }
     [Required, StringLength(20)]
     public string Login { get; private set; }
+    [Required, StringLength(500)]
     public string PasswordHash { get; private set; }
+    [Required]
+    public bool IsBlocked { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
@@ -31,4 +34,10 @@ public class User : IChangedAt
 
         FullName = fullName;
     }
+
+    public void Block() =>
+        IsBlocked = true;
+
+    public void Unblock() =>
+        IsBlocked = false;
 }
