@@ -42,7 +42,7 @@ public class WorkstationService
         if (workstation == null)
             return false;
 
-        _repository.Delete(workstation);
+        workstation.WriteOff();
         await _unitOfWork.SaveChangesAsync();
 
         return true;
