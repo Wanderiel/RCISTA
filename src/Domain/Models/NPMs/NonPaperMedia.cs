@@ -15,18 +15,37 @@ public class NonPaperMedia : IChangedAt
         Capacity = capacity;
     }
 
+    /// <summary>
+    /// Id для базы данных
+    /// </summary>
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public NpmId Id { get; private set; }
+    /// <summary>
+    /// Тип: HDD, SSD
+    /// </summary>
     [Required]
     public string Type { get; private set; }
+    /// Производитель
     [Required, StringLength(50)]
     public string Manufacturer { get; private set; }
+    /// <summary>
+    /// Модель
+    /// </summary>
     [Required, StringLength(50)]
     public string Model { get; private set; }
+    /// <summary>
+    /// Серийный номер
+    /// </summary>
     [Required, StringLength(100)]
     public string SerialNumber { get; private set; }
+    /// <summary>
+    /// Ёмкость в Гб
+    /// </summary>
     [Required]
     public int Capacity { get; private set; }
+    /// <summary>
+    /// Статус состояния: неработоспособный - true; рабочий - false
+    /// </summary>
     [Required]
     public bool IsBroken { get; private set; } = false;
     //public UserId AutorId { get; private set; }
