@@ -36,28 +36,28 @@ public class NonPaperMedia : IChangedAt
 
     public void UpdateType(string type)
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(type, nameof(type));
+        ArgumentException.ThrowIfNullOrWhiteSpace(type, nameof(type));
 
         Type = type;
     }
 
     public void UpdateManufacturer(string manufacturer)
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(manufacturer, nameof(manufacturer));
+        ArgumentException.ThrowIfNullOrWhiteSpace(manufacturer, nameof(manufacturer));
 
         Manufacturer = manufacturer;
     }
 
     public void UpdateModel(string model)
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(model, nameof(model));
+        ArgumentException.ThrowIfNullOrWhiteSpace(model, nameof(model));
 
         Model = model;
     }
 
     public void UpdateSerialNumber(string serialNumber)
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(serialNumber, nameof(serialNumber));
+        ArgumentException.ThrowIfNullOrWhiteSpace(serialNumber, nameof(serialNumber));
 
         SerialNumber = serialNumber;
     }
