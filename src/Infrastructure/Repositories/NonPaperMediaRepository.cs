@@ -20,7 +20,4 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
 
     public async Task<NonPaperMedia?> GetByIdAsync(NpmId id) =>
         await _context.NonPaperMedias.FindAsync(id);
-
-    public void Delete(NonPaperMedia nonPaper) =>
-        _context.NonPaperMedias.Remove(nonPaper);
 }

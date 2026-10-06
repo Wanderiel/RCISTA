@@ -20,7 +20,4 @@ public class WorkstationRepository : IWorkstationRepository
 
     public async Task<Workstation?> GetByIdAsync(WorkstationId workstationId) =>
         await _context.Workstations.FindAsync(workstationId);
-
-    public void Delete(Workstation workstation) =>
-        _context.Remove(workstation);
 }
