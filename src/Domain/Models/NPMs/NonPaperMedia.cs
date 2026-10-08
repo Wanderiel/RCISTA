@@ -6,7 +6,7 @@ namespace Domain.Models.NPMs;
 
 public class NonPaperMedia : IChangedAt
 {
-    public NonPaperMedia(string type, string manufacturer, string model, string serialNumber, int capacity)
+    public NonPaperMedia(NpmType type, string manufacturer, string model, string serialNumber, int capacity)
     {
         Type = type;
         Manufacturer = manufacturer;
@@ -24,8 +24,10 @@ public class NonPaperMedia : IChangedAt
     /// Тип: HDD, SSD
     /// </summary>
     [Required]
-    public string Type { get; private set; }
+    public NpmType Type { get; private set; }
+    /// <summary>
     /// Производитель
+    /// </summary>
     [Required, StringLength(50)]
     public string Manufacturer { get; private set; }
     /// <summary>
@@ -43,54 +45,16 @@ public class NonPaperMedia : IChangedAt
     /// </summary>
     [Required]
     public int Capacity { get; private set; }
-    /// <summary>
-    /// Статус состояния: неработоспособный - true; рабочий - false
-    /// </summary>
     [Required]
-    public bool IsBroken { get; private set; } = false;
+    public NpmStatus Status { get; private set; } = NpmStatus.Good;
     //public UserId AutorId { get; private set; }
     //public UserId ChangedId { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public void UpdateType(string type)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(type, nameof(type));
-
-        Type = type;
-    }
-
-    public void UpdateManufacturer(string manufacturer)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(manufacturer, nameof(manufacturer));
-
-        Manufacturer = manufacturer;
-    }
-
-    public void UpdateModel(string model)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(model, nameof(model));
-
-        Model = model;
-    }
-
-    public void UpdateSerialNumber(string serialNumber)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(serialNumber, nameof(serialNumber));
-
-        SerialNumber = serialNumber;
-    }
-
-    public void UpdateCapacity(int capacity)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(capacity, nameof(capacity));
-
-        Capacity = capacity;
-    }
-
     public void ToBreak() =>
-        IsBroken = true;
+        Status = NpmStatus.Broken;
 
     public void Repair() =>
-        IsBroken = false;
+        Status = NpmStatus.Good;
 }
