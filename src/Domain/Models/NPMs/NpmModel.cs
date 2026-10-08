@@ -9,7 +9,7 @@ public class NpmModel
         Name = name;
 
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    NpmModelId Id { get; set; }
+    public NpmModelId Id { get; set; }
     [Required, StringLength(100)]
     public string Name { get; set; }
 }
