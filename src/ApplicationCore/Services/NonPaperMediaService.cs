@@ -32,6 +32,7 @@ public class NonPaperMediaService
         return await _repository.GetByIdAsync(npmId);
     }
 
+    //TODO сломано, починить
     public async Task<bool> UpdateAsync(int id, UpdatedNPMDto npmDto)
     {
         NpmId npmId = new NpmId(id);
@@ -40,7 +41,7 @@ public class NonPaperMediaService
         if (nonPaperMedia == null)
             return false;
 
-        UpdateNonPaperMedia(nonPaperMedia, npmDto);
+        //UpdateNonPaperMedia(nonPaperMedia, npmDto);
         await _unitOfWork.SaveChangesAsync();
 
         return true;
@@ -58,28 +59,5 @@ public class NonPaperMediaService
         await _unitOfWork.SaveChangesAsync();
 
         return true;
-    }
-
-    private void UpdateNonPaperMedia(NonPaperMedia nonPaperMedia, UpdatedNPMDto npmDto)
-    {
-        if (string.IsNullOrWhiteSpace(npmDto.Manufacturer) == false || npmDto.Manufacturer != nonPaperMedia.Manufacturer)
-            nonPaperMedia.UpdateManufacturer(npmDto.Manufacturer);
-
-        if (string.IsNullOrWhiteSpace(npmDto.Model) == false || npmDto.Model != nonPaperMedia.Model)
-            nonPaperMedia.UpdateModel(npmDto.Model);
-
-        if (string.IsNullOrWhiteSpace(npmDto.SerialNumber) == false || npmDto.SerialNumber != nonPaperMedia.SerialNumber)
-            nonPaperMedia.UpdateSerialNumber(npmDto.SerialNumber);
-
-        if (npmDto.Capacity > 0 || npmDto.Capacity != nonPaperMedia.Capacity)
-            nonPaperMedia.UpdateCapacity(npmDto.Capacity);
-
-        if (npmDto.IsBroken == nonPaperMedia.IsBroken)
-            return;
-
-        if (npmDto.IsBroken)
-            nonPaperMedia.ToBreak();
-        else
-            nonPaperMedia.Repair();
     }
 }
