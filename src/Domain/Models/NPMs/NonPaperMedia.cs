@@ -6,7 +6,9 @@ namespace Domain.Models.NPMs;
 
 public class NonPaperMedia : IChangedAt
 {
-    public NonPaperMedia(NpmType type, string manufacturer, string model, string serialNumber, int capacity)
+    private NonPaperMedia() { }
+
+    public NonPaperMedia(NpmType type, string manufacturer, NpmModel model, string serialNumber, int capacity)
     {
         Type = type;
         Manufacturer = manufacturer;
@@ -34,7 +36,7 @@ public class NonPaperMedia : IChangedAt
     /// Модель
     /// </summary>
     [Required, StringLength(50)]
-    public string Model { get; private set; }
+    public NpmModel Model { get; private set; }
     /// <summary>
     /// Серийный номер
     /// </summary>
