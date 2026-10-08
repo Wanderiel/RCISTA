@@ -1,3 +1,3 @@
 ﻿namespace Domain.Models.NPMs;
 
-public readonly record struct NpmModelId(int Id);
+public readonly record struct NpmModelId(int Value);
