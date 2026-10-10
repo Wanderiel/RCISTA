@@ -9,11 +9,12 @@ public class ModelRepository : IModelRepository
 {
     private readonly SQLiteContext _context;
 
-    public ModelRepository(SQLiteContext context) => _context = context;
+    public ModelRepository(SQLiteContext context) =>
+        _context = context;
 
-    public async Task<Model> GetOrCreateByNameAsync(string name, CancellationToken cancellationTokenct = default)
+    public async Task<Model> GetOrCreateByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        Model? model = await FindByNameAsync(name, cancellationTokenct);
+        Model? model = await FindByNameAsync(name, cancellationToken);
 
         if (model == null)
         {
@@ -24,11 +25,9 @@ public class ModelRepository : IModelRepository
         return model;
     }
 
-    public async Task<Model?> FindByIdAsync(ModelId id, CancellationToken cancellationTokenct = default)
-        => await _context.Models
-            .FirstOrDefaultAsync(m => m.Id.Value == id.Value, cancellationTokenct);
+    public async Task<Model?> FindByIdAsync(ModelId id, CancellationToken cancellationToken = default)
+        => await _context.Models.FindAsync(id, cancellationToken);
 
-    public async Task<Model?> FindByNameAsync(string name, CancellationToken cancellationTokenct = default)
-        => await _context.Models
-            .FirstOrDefaultAsync(m => m.Name == name, cancellationTokenct);
+    public async Task<Model?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+        => await _context.Models.FirstOrDefaultAsync(m => m.Name == name, cancellationToken);
 }
