@@ -16,10 +16,12 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
         _context.NonPaperMedias.Add(nonPaperMedia);
 
     public async Task<List<NonPaperMedia>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        await _context.NonPaperMedias.Include(d => d.Model)
-                .ToListAsync(cancellationToken);
+        await _context.NonPaperMedias
+            .Include(d => d.Model)
+            .ToListAsync(cancellationToken);
 
     public async Task<NonPaperMedia?> GetByIdAsync(NpmId id, CancellationToken cancellationToken = default) =>
-        await _context.NonPaperMedias.Include(d => d.Model)
+        await _context.NonPaperMedias
+            .Include(d => d.Model)
             .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 }

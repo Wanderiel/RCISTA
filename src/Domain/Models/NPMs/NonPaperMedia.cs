@@ -23,7 +23,7 @@ public class NonPaperMedia : IChangedAt
     public NpmType Type { get; private set; }
     [Required, StringLength(100)]
     public string Manufacturer { get; private set; }
-    [Required, StringLength(100)]
+    [Required]
     public Model Model { get; private set; }
     /// <summary>
     /// Серийный номер
