@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SQLiteContext))]
-    [Migration("20261010165657_InitialCreate")]
+    [Migration("20261010181117_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -23,7 +23,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.NPMs.Model", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -42,7 +41,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.NPMs.NonPaperMedia", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Capacity")
@@ -91,7 +89,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Users.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -124,7 +121,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Workstations.Workstation", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")

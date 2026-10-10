@@ -20,7 +20,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.NPMs.Model", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -39,7 +38,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.NPMs.NonPaperMedia", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Capacity")
@@ -88,7 +86,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Users.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -121,7 +118,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Models.Workstations.Workstation", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
