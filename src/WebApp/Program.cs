@@ -31,6 +31,7 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IWorkstationRepository, WorkstationRepository>();
 builder.Services.AddScoped<WorkstationService>();
 builder.Services.AddScoped<INonPaperMediaRepository, NonPaperMediaRepository>();
+builder.Services.AddScoped<IModelRepository, ModelRepository>();
 builder.Services.AddScoped<NonPaperMediaService>();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 
