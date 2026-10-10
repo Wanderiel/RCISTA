@@ -15,6 +15,7 @@ public class SQLiteContext : DbContext, IUnitOfWork
     public DbSet<User> Users { get; set; }
     public DbSet<Workstation> Workstations { get; set; }
     public DbSet<NonPaperMedia> NonPaperMedias { get; set; }
+    public DbSet<Model> Models { get; set; }
 
     public override int SaveChanges()
     {
@@ -76,6 +77,17 @@ public class SQLiteContext : DbContext, IUnitOfWork
                     npmId => new NpmId(npmId));
 
             builder.HasIndex(npm => npm.SerialNumber)
+                .IsUnique();
+        });
+
+        modelBuilder.Entity<Model>(builder =>
+        {
+            builder.Property(p => p.Id)
+                .HasConversion(
+                    modelId => modelId.Value,
+                    modelId => new ModelId(modelId));
+
+            builder.HasIndex(model => model.Name)
                 .IsUnique();
         });
 

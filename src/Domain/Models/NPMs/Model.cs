@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.NPMs;
 
-/// <summary>
-/// Модель
-/// </summary>
 public class Model
 {
+    private Model() { }
+
     public Model(string name) =>
         Name = name;
 
