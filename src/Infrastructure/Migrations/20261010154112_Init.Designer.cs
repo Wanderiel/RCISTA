@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SQLiteContext))]
-    [Migration("20261010131947_Init")]
+    [Migration("20261010154112_Init")]
     partial class Init
     {
         /// <inheritdoc />
