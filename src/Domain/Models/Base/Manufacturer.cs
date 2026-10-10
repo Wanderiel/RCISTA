@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.Base;
 
+/// <summary>
+/// Производитель
+/// </summary>
 public class Manufacturer
 {
     public Manufacturer(string name) =>

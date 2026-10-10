@@ -3,13 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.NPMs;
 
-public class NpmModel
+/// <summary>
+/// Модель
+/// </summary>
+public class Model
 {
-    public NpmModel(string name) =>
+    public Model(string name) =>
         Name = name;
 
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public NpmModelId Id { get; set; }
+    public ModelId Id { get; set; }
     [Required, StringLength(100)]
     public string Name { get; set; }
 }

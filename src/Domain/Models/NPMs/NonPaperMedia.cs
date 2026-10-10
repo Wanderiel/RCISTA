@@ -8,7 +8,7 @@ public class NonPaperMedia : IChangedAt
 {
     private NonPaperMedia() { }
 
-    public NonPaperMedia(NpmType type, string manufacturer, NpmModel model, string serialNumber, int capacity)
+    public NonPaperMedia(NpmType type, string manufacturer, Model model, string serialNumber, int capacity)
     {
         Type = type;
         Manufacturer = manufacturer;
@@ -17,26 +17,14 @@ public class NonPaperMedia : IChangedAt
         Capacity = capacity;
     }
 
-    /// <summary>
-    /// Id для базы данных
-    /// </summary>
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public NpmId Id { get; private set; }
-    /// <summary>
-    /// Тип: HDD, SSD
-    /// </summary>
     [Required]
     public NpmType Type { get; private set; }
-    /// <summary>
-    /// Производитель
-    /// </summary>
-    [Required, StringLength(50)]
+    [Required, StringLength(100)]
     public string Manufacturer { get; private set; }
-    /// <summary>
-    /// Модель
-    /// </summary>
-    [Required, StringLength(50)]
-    public NpmModel Model { get; private set; }
+    [Required, StringLength(100)]
+    public Model Model { get; private set; }
     /// <summary>
     /// Серийный номер
     /// </summary>
