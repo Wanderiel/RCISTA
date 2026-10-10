@@ -58,7 +58,7 @@ public class SQLiteContext : DbContext, IUnitOfWork
             builder.Property(p => p.Id)
                 .HasConversion(
                     workstationId => workstationId.Value,
-                    workstationId => new WorkstationId(workstationId));
+                    id => new WorkstationId(id));
 
             builder.HasIndex(w => w.InventoryNumber)
                 .IsUnique();
@@ -74,7 +74,12 @@ public class SQLiteContext : DbContext, IUnitOfWork
             builder.Property(p => p.Id)
                 .HasConversion(
                     npmId => npmId.Value,
-                    npmId => new NpmId(npmId));
+                    id => new NpmId(id));
+
+            builder.HasOne(npm => npm.Model)
+                .WithMany()
+                .HasForeignKey("ModelId")
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(npm => npm.SerialNumber)
                 .IsUnique();
@@ -85,7 +90,7 @@ public class SQLiteContext : DbContext, IUnitOfWork
             builder.Property(p => p.Id)
                 .HasConversion(
                     modelId => modelId.Value,
-                    modelId => new ModelId(modelId));
+                    id => new ModelId(id));
 
             builder.HasIndex(model => model.Name)
                 .IsUnique();

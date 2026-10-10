@@ -5,6 +5,6 @@ namespace ApplicationCore.Interfaces;
 public interface INonPaperMediaRepository
 {
     void Insert(NonPaperMedia nonPaperMedia);
-    Task<List<NonPaperMedia>> GetAllAsync();
-    Task<NonPaperMedia?> GetByIdAsync(NpmId id);
+    Task<List<NonPaperMedia>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<NonPaperMedia?> GetByIdAsync(NpmId id, CancellationToken cancellationToken = default);
 }
