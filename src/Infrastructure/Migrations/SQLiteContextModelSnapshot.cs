@@ -17,6 +17,24 @@ namespace Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
 
+            modelBuilder.Entity("Domain.Models.Base.Manufacturer", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Manufacturers");
+                });
+
             modelBuilder.Entity("Domain.Models.NPMs.Model", b =>
                 {
                     b.Property<int>("Id")
@@ -46,10 +64,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Manufacturer")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ManufacturerId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ModelId")
                         .HasColumnType("INTEGER");
@@ -72,6 +88,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ManufacturerId");
 
                     b.HasIndex("ModelId");
 
@@ -144,6 +162,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.NPMs.NonPaperMedia", b =>
                 {
+                    b.HasOne("Domain.Models.Base.Manufacturer", "Manufacturer")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Models.NPMs.Model", "Model")
                         .WithMany()
                         .HasForeignKey("ModelId")
@@ -154,6 +178,8 @@ namespace Infrastructure.Migrations
                         .WithMany("Disks")
                         .HasForeignKey("WorkstationId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Manufacturer");
 
                     b.Navigation("Model");
                 });

@@ -1,4 +1,5 @@
 ﻿using Domain.Interfaces;
+using Domain.Models.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Models.NPMs;
@@ -7,7 +8,7 @@ public class NonPaperMedia : IChangedAt
 {
     private NonPaperMedia() { }
 
-    public NonPaperMedia(NpmType type, string manufacturer, Model model, string serialNumber, int capacity)
+    public NonPaperMedia(NpmType type, Manufacturer manufacturer, Model model, string serialNumber, int capacity)
     {
         Type = type;
         Manufacturer = manufacturer;
@@ -20,8 +21,8 @@ public class NonPaperMedia : IChangedAt
     public NpmId Id { get; private set; }
     [Required]
     public NpmType Type { get; private set; }
-    [Required, StringLength(100)]
-    public string Manufacturer { get; private set; }
+    [Required]
+    public Manufacturer Manufacturer { get; private set; }
     [Required]
     public Model Model { get; private set; }
     /// <summary>

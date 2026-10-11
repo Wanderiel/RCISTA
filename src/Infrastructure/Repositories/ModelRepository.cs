@@ -25,9 +25,9 @@ public class ModelRepository : IModelRepository
         return model;
     }
 
-    public async Task<Model?> FindByIdAsync(ModelId id, CancellationToken cancellationToken = default)
-        => await _context.Models.FindAsync(id, cancellationToken);
+    public async Task<Model?> FindByIdAsync(ModelId id, CancellationToken cancellationToken = default) =>
+        await _context.Models.FindAsync(id, cancellationToken);
 
-    public async Task<Model?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
-        => await _context.Models.FirstOrDefaultAsync(m => m.Name == name, cancellationToken);
+    public async Task<Model?> FindByNameAsync(string name, CancellationToken cancellationToken = default) =>
+        await _context.Models.FirstOrDefaultAsync(m => m.Name == name, cancellationToken);
 }

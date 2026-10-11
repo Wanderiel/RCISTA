@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Dtos.NPMs;
 using ApplicationCore.Interfaces;
+using Domain.Models.Base;
 using Domain.Models.NPMs;
 
 namespace ApplicationCore.Services;
@@ -7,20 +8,23 @@ namespace ApplicationCore.Services;
 public class NonPaperMediaService
 {
     private readonly INonPaperMediaRepository _npmRepository;
+    private readonly IManufacturerRepository _manufacturerRepository;
     private readonly IModelRepository _modelRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public NonPaperMediaService(INonPaperMediaRepository repository, IModelRepository modelRepository, IUnitOfWork unitOfWork)
+    public NonPaperMediaService(INonPaperMediaRepository repository, IManufacturerRepository manufacturerRepository, IModelRepository modelRepository, IUnitOfWork unitOfWork)
     {
         _npmRepository = repository;
+        _manufacturerRepository = manufacturerRepository;
         _modelRepository = modelRepository;
         _unitOfWork = unitOfWork;
     }
 
     public async Task Create(CreatedNPMdto dto)
     {
+        Manufacturer manufacturer = await _manufacturerRepository.GetOrCreateByNameAsync(dto.Manufacturer);
         Model model = await _modelRepository.GetOrCreateByNameAsync(dto.Model);
-        NonPaperMedia nonPaperMedia = new NonPaperMedia(dto.Type, dto.Manufacturer, model, dto.SerialNumber, dto.Capacity);
+        NonPaperMedia nonPaperMedia = new NonPaperMedia(dto.Type, manufacturer, model, dto.SerialNumber, dto.Capacity);
         _npmRepository.Insert(nonPaperMedia);
         await _unitOfWork.SaveChangesAsync();
     }

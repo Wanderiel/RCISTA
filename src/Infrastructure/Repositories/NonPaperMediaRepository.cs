@@ -17,7 +17,8 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
 
     public async Task<List<NonPaperMedia>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _context.NonPaperMedias
-            .Include(d => d.Model)
+            .Include(npm => npm.Manufacturer)
+            .Include(npm => npm.Model)
             .ToListAsync(cancellationToken);
 
     public async Task<NonPaperMedia?> GetByIdAsync(NpmId id, CancellationToken cancellationToken = default) =>

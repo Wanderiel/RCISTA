@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Interfaces;
 using Domain.Interfaces;
+using Domain.Models.Base;
 using Domain.Models.NPMs;
 using Domain.Models.Users;
 using Domain.Models.Workstations;
@@ -15,6 +16,7 @@ public class SQLiteContext : DbContext, IUnitOfWork
     public DbSet<User> Users { get; set; }
     public DbSet<Workstation> Workstations { get; set; }
     public DbSet<NonPaperMedia> NonPaperMedias { get; set; }
+    public DbSet<Manufacturer> Manufacturers { get; set; }
     public DbSet<Model> Models { get; set; }
 
     public override int SaveChanges()
@@ -76,12 +78,28 @@ public class SQLiteContext : DbContext, IUnitOfWork
                     npmId => npmId.Value,
                     id => new NpmId(id));
 
+            builder.HasOne(npm => npm.Manufacturer)
+                .WithMany()
+                .HasForeignKey("ManufacturerId")
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(npm => npm.Model)
                 .WithMany()
                 .HasForeignKey("ModelId")
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(npm => npm.SerialNumber)
+                .IsUnique();
+        });
+
+        modelBuilder.Entity<Manufacturer>(builder =>
+        {
+            builder.Property(p => p.Id)
+                .HasConversion(
+                    manufacturerId => manufacturerId.Value,
+                    id => new ManufacturerId(id));
+
+            builder.HasIndex(manufacturer => manufacturer.Name)
                 .IsUnique();
         });
 
