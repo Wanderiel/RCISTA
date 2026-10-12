@@ -2,7 +2,7 @@
 
 namespace ApplicationCore.Dtos.NPMs;
 
-public class CreatedNPMdto
+public class NpmRequest
 {
     public required NpmType Type { get; set; }
     public required string Manufacturer { get; set; }

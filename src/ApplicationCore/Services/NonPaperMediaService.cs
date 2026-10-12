@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Dtos.NPMs;
+using ApplicationCore.Extentions;
 using ApplicationCore.Interfaces;
 using Domain.Models.Base;
 using Domain.Models.NPMs;
@@ -20,7 +21,7 @@ public class NonPaperMediaService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Create(CreatedNPMdto dto)
+    public async Task Create(NpmRequest dto)
     {
         Manufacturer manufacturer = await _manufacturerRepository.GetOrCreateByNameAsync(dto.Manufacturer);
         Model model = await _modelRepository.GetOrCreateByNameAsync(dto.Model);
@@ -29,14 +30,14 @@ public class NonPaperMediaService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task<List<NonPaperMedia>> GetAllAsync() =>
-        await _npmRepository.GetAllAsync();
+    public async Task<List<NpmResponse>> GetAllAsync() =>
+        (await _npmRepository.GetAllAsync()).Select(npm => npm.ToDto()).ToList();
 
-    public async Task<NonPaperMedia?> GetAsync(int id)
+    public async Task<NpmResponse?> GetAsync(int id)
     {
         NpmId npmId = new NpmId(id);
 
-        return await _npmRepository.GetByIdAsync(npmId);
+        return (await _npmRepository.GetByIdAsync(npmId))?.ToDto();
     }
 
     //TODO сломано, починить
