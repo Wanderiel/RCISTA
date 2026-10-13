@@ -17,7 +17,7 @@ public class WorkstationService
 
     public async Task Create(CreatedWorkstationDto workstationDto)
     {
-        Workstation workstation = new Workstation(workstationDto.InventoryNumber);
+        Workstation workstation = new Workstation(workstationDto.InventoryNumber.ToUpper());
         _repository.Insert(workstation);
         await _unitOfWork.SaveChangesAsync();
     }

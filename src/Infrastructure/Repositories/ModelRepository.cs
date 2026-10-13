@@ -29,5 +29,5 @@ public class ModelRepository : IModelRepository
         await _context.Models.FindAsync(id, cancellationToken);
 
     public async Task<Model?> FindByNameAsync(string name, CancellationToken cancellationToken = default) =>
-        await _context.Models.FirstOrDefaultAsync(m => m.Name == name, cancellationToken);
+        await _context.Models.FirstOrDefaultAsync(m => m.Name.ToLower() == name.ToLower(), cancellationToken);
 }

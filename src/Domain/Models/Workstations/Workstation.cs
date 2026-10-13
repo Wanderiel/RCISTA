@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces;
 using Domain.Models.NPMs;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.Workstations;
 
@@ -11,7 +12,7 @@ public class Workstation : IChangedAt
     public Workstation(string inventoryNumber) =>
         InventoryNumber = inventoryNumber;
 
-    [Key]
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public WorkstationId Id { get; private set; }
     [Required, StringLength(50)]
     public string InventoryNumber { get; private set; }

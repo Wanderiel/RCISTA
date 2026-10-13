@@ -29,5 +29,5 @@ public class ManufacturerRepository : IManufacturerRepository
         await _context.Manufacturers.FindAsync(id, cancellationToken);
 
     public async Task<Manufacturer?> FindByNameAsync(string name, CancellationToken cancellationToken = default) =>
-        await _context.Manufacturers.FirstOrDefaultAsync(m => m.Name == name, cancellationToken);
+        await _context.Manufacturers.FirstOrDefaultAsync(m => m.Name.ToLower() == name.ToLower(), cancellationToken);
 }
