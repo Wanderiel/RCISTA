@@ -1,6 +1,5 @@
 ﻿using Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.Users;
 
@@ -15,7 +14,6 @@ public class User : IChangedAt
         PasswordHash = passwordHash;
     }
 
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public UserId Id { get; private set; }
     [Required]
     public FullName FullName { get; private set; }

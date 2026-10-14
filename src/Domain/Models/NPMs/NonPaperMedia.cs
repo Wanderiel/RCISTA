@@ -1,7 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models.Base;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.NPMs;
 
@@ -18,8 +17,7 @@ public class NonPaperMedia : IChangedAt
         Capacity = capacity;
     }
 
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public NpmId Id { get; private set; }
+    public NpmId Id { get; set; }
     [Required]
     public NpmType Type { get; private set; }
     [Required]

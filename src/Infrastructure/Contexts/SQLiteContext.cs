@@ -37,10 +37,12 @@ public class SQLiteContext : DbContext, IUnitOfWork
     {
         modelBuilder.Entity<User>(builder =>
         {
+            builder.HasKey(p => p.Id);
+
             builder.Property(p => p.Id)
                 .HasConversion(
                     userId => userId.Value,
-                    userId => new UserId(userId));
+                    id => new UserId(id));
 
             builder.OwnsOne(
                 user => user.FullName,
@@ -57,6 +59,8 @@ public class SQLiteContext : DbContext, IUnitOfWork
 
         modelBuilder.Entity<Workstation>(builder =>
         {
+            builder.HasKey(p => p.Id);
+
             builder.Property(p => p.Id)
                 .HasConversion(
                     workstationId => workstationId.Value,
@@ -73,10 +77,13 @@ public class SQLiteContext : DbContext, IUnitOfWork
 
         modelBuilder.Entity<NonPaperMedia>(builder =>
         {
+            builder.HasKey(p => p.Id);
+
             builder.Property(p => p.Id)
                 .HasConversion(
                     npmId => npmId.Value,
-                    id => new NpmId(id));
+                    id => new NpmId(id))
+                .ValueGeneratedOnAdd();
 
             builder.HasOne(npm => npm.Manufacturer)
                 .WithMany()
@@ -94,10 +101,13 @@ public class SQLiteContext : DbContext, IUnitOfWork
 
         modelBuilder.Entity<Manufacturer>(builder =>
         {
+            builder.HasKey(p => p.Id);
+
             builder.Property(p => p.Id)
                 .HasConversion(
                     manufacturerId => manufacturerId.Value,
-                    id => new ManufacturerId(id));
+                    id => new ManufacturerId(id))
+                .ValueGeneratedOnAdd();
 
             builder.HasIndex(manufacturer => manufacturer.Name)
                 .IsUnique();
@@ -105,10 +115,13 @@ public class SQLiteContext : DbContext, IUnitOfWork
 
         modelBuilder.Entity<Model>(builder =>
         {
+            builder.HasKey(p => p.Id);
+
             builder.Property(p => p.Id)
                 .HasConversion(
                     modelId => modelId.Value,
-                    id => new ModelId(id));
+                    id => new ModelId(id))
+                .ValueGeneratedOnAdd();
 
             builder.HasIndex(model => model.Name)
                 .IsUnique();
