@@ -53,7 +53,7 @@ public class WorkstationController : Controller
         bool result = await _service.AddDisk(workstationId, npmId);
 
         if (result == false)
-            return NotFound();
+            return UnprocessableEntity();
 
         return Ok();
     }
@@ -64,7 +64,7 @@ public class WorkstationController : Controller
         bool result = await _service.RemoveDisk(workstationId, npmId);
 
         if (result == false)
-            return NotFound();
+            return UnprocessableEntity();
 
         return Ok();
     }
