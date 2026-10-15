@@ -26,7 +26,7 @@ public class WorkstationRepository : IWorkstationRepository
     public async Task<Workstation?> GetByIdAsync(WorkstationId workstationId) =>
         await _context.Workstations
             .Include(w => w.Disks)
-                    .ThenInclude(d => d.Manufacturer)
+                .ThenInclude(d => d.Manufacturer)
             .Include(w => w.Disks)
                 .ThenInclude(d => d.Model)
             .FirstOrDefaultAsync(w => w.Id == workstationId);
