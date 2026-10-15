@@ -42,7 +42,8 @@ public class SQLiteContext : DbContext, IUnitOfWork
             builder.Property(p => p.Id)
                 .HasConversion(
                     userId => userId.Value,
-                    id => new UserId(id));
+                    id => new UserId(id))
+                .ValueGeneratedOnAdd();
 
             builder.OwnsOne(
                 user => user.FullName,
@@ -64,7 +65,8 @@ public class SQLiteContext : DbContext, IUnitOfWork
             builder.Property(p => p.Id)
                 .HasConversion(
                     workstationId => workstationId.Value,
-                    id => new WorkstationId(id));
+                    id => new WorkstationId(id))
+                .ValueGeneratedOnAdd();
 
             builder.HasIndex(w => w.InventoryNumber)
                 .IsUnique();
