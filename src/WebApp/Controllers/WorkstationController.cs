@@ -23,13 +23,13 @@ public class WorkstationController : Controller
     }
 
     [HttpGet]
-    public async Task<List<Workstation>> GetAll() =>
+    public async Task<List<WorkstationResponse>> GetAll() =>
         await _service.GetAllAsync();
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Workstation>> Get(int id)
+    public async Task<ActionResult<WorkstationResponse>> Get(int id)
     {
-        Workstation? workstation = await _service.GetAsync(id);
+        WorkstationResponse? workstation = await _service.GetAsync(id);
 
         if (workstation == null)
             return NotFound();

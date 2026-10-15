@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Dtos.WorkStations;
+using ApplicationCore.Extentions;
 using ApplicationCore.Interfaces;
 using Domain.Models.Workstations;
 
@@ -22,16 +23,14 @@ public class WorkstationService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task<List<Workstation>> GetAllAsync()
-    {
-        return await _repository.GetAllAsync();
-    }
+    public async Task<List<WorkstationResponse>> GetAllAsync() =>
+        (await _repository.GetAllAsync()).Select(w => w.ToDto()).ToList();
 
-    public async Task<Workstation?> GetAsync(int id)
+    public async Task<WorkstationResponse?> GetAsync(int id)
     {
         WorkstationId workstationId = new WorkstationId(id);
 
-        return await _repository.GetByIdAsync(workstationId);
+        return (await _repository.GetByIdAsync(workstationId))?.ToDto();
     }
 
     public async Task<bool> DeleteAsync(int id)
