@@ -47,8 +47,8 @@ public class WorkstationController : Controller
         return Ok();
     }
 
-    [HttpPut] //<= не верно
-    public async Task<IActionResult> AddDisk(int workstationId, int npmId)
+    [HttpPut("AddDisk")]
+    public async Task<IActionResult> AddDisk([FromRoute] int workstationId, [FromRoute] int npmId)
     {
         bool result = await _service.AddDisk(workstationId, npmId);
 
@@ -58,8 +58,8 @@ public class WorkstationController : Controller
         return Ok();
     }
 
-    [HttpPut("{id}")] //<= не верно
-    public async Task<IActionResult> RemoveDisk(int workstationId, int npmId)
+    [HttpPut("RemoveDisk")]
+    public async Task<IActionResult> RemoveDisk([FromRoute] int workstationId, [FromRoute] int npmId)
     {
         bool result = await _service.RemoveDisk(workstationId, npmId);
 
