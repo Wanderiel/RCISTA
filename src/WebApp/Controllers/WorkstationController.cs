@@ -1,6 +1,5 @@
 ﻿using ApplicationCore.Dtos.WorkStations;
 using ApplicationCore.Services;
-using Domain.Models.Workstations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
@@ -41,6 +40,28 @@ public class WorkstationController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         bool result = await _service.DeleteAsync(id);
+
+        if (result == false)
+            return NotFound();
+
+        return Ok();
+    }
+
+    [HttpPut] //<= не верно
+    public async Task<IActionResult> AddDisk(int workstationId, int npmId)
+    {
+        bool result = await _service.AddDisk(workstationId, npmId);
+
+        if (result == false)
+            return NotFound();
+
+        return Ok();
+    }
+
+    [HttpPut("{id}")] //<= не верно
+    public async Task<IActionResult> RemoveDisk(int workstationId, int npmId)
+    {
+        bool result = await _service.RemoveDisk(workstationId, npmId);
 
         if (result == false)
             return NotFound();

@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Dtos.WorkStations;
 using ApplicationCore.Extentions;
 using ApplicationCore.Interfaces;
+using Domain.Models.NPMs;
 using Domain.Models.Workstations;
 
 namespace ApplicationCore.Services;
@@ -8,11 +9,13 @@ namespace ApplicationCore.Services;
 public class WorkstationService
 {
     private readonly IWorkstationRepository _repository;
+    private readonly INonPaperMediaRepository _npmRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public WorkstationService(IWorkstationRepository repository, IUnitOfWork unitOfWork)
+    public WorkstationService(IWorkstationRepository repository, INonPaperMediaRepository npmRepository, IUnitOfWork unitOfWork)
     {
         _repository = repository;
+        _npmRepository = npmRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -42,6 +45,51 @@ public class WorkstationService
             return false;
 
         workstation.WriteOff();
+        await _unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> AddDisk(int workstationId, int diskId)
+    {
+        WorkstationId id = new WorkstationId(workstationId);
+        Workstation? workstation = await _repository.GetByIdAsync(id);
+
+        if (workstation == null)
+            return false;
+
+        NpmId npmId = new NpmId(diskId);
+        NonPaperMedia? disk = workstation.Disks.FirstOrDefault(d => d.Id == npmId);
+
+        if (disk == null)
+            disk = await _npmRepository.GetByIdAsync(npmId);
+        else
+            return false;
+
+        if (disk == null)
+            return false;
+
+        workstation.Disks.Add(disk);
+        await _unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> RemoveDisk(int workstationId, int diskId)
+    {
+        WorkstationId id = new WorkstationId(workstationId);
+        Workstation? workstation = await _repository.GetByIdAsync(id);
+
+        if (workstation == null)
+            return false;
+
+        NpmId npmId = new NpmId(diskId);
+        NonPaperMedia? disk = workstation.Disks.FirstOrDefault(d => d.Id == npmId);
+
+        if (disk == null)
+            return false;
+
+        workstation.Disks.Remove(disk);
         await _unitOfWork.SaveChangesAsync();
 
         return true;
