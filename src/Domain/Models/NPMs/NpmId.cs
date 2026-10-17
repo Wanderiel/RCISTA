@@ -1,11 +1,3 @@
 ﻿namespace Domain.Models.NPMs;
 
-public struct NpmId
-{
-    private readonly int _id;
-
-    public NpmId(int id) =>
-        _id = id;
-
-    public int Value => _id;
-}
+public readonly record struct NpmId(int Value);

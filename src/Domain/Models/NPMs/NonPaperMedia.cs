@@ -1,12 +1,14 @@
 ﻿using Domain.Interfaces;
+using Domain.Models.Base;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.NPMs;
 
 public class NonPaperMedia : IChangedAt
 {
-    public NonPaperMedia(string type, string manufacturer, string model, string serialNumber, int capacity)
+    private NonPaperMedia() { }
+
+    public NonPaperMedia(NpmType type, Manufacturer manufacturer, Model model, string serialNumber, int capacity)
     {
         Type = type;
         Manufacturer = manufacturer;
@@ -15,48 +17,33 @@ public class NonPaperMedia : IChangedAt
         Capacity = capacity;
     }
 
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public NpmId Id { get; private set; }
+    public NpmId Id { get; set; }
     [Required]
-    public string Type { get; private set; }
-    [Required, StringLength(50)]
-    public string Manufacturer { get; private set; }
-    [Required, StringLength(50)]
-    public string Model { get; private set; }
+    public NpmType Type { get; private set; }
+    [Required]
+    public Manufacturer Manufacturer { get; private set; }
+    [Required]
+    public Model Model { get; private set; }
+    /// <summary>
+    /// Серийный номер
+    /// </summary>
     [Required, StringLength(100)]
     public string SerialNumber { get; private set; }
+    /// <summary>
+    /// Ёмкость в Гб
+    /// </summary>
     [Required]
     public int Capacity { get; private set; }
+    [Required]
+    public NpmStatus Status { get; private set; } = NpmStatus.Good;
     //public UserId AutorId { get; private set; }
     //public UserId ChangedId { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public void UpdateType(string type)
-    {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(type, nameof(type));
+    public void ToBreak() =>
+        Status = NpmStatus.Broken;
 
-        Type = type;
-    }
-
-    public void UpdateManufacturer(string manufacturer)
-    {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(manufacturer, nameof(manufacturer));
-
-        Manufacturer = manufacturer;
-    }
-
-    public void UpdateSerialNumber(string serialNumber)
-    {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(serialNumber, nameof(serialNumber));
-
-        SerialNumber = serialNumber;
-    }
-
-    public void UpdateCapacity(int capacity)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(capacity, nameof(capacity));
-
-        Capacity = capacity;
-    }
+    public void Repair() =>
+        Status = NpmStatus.Good;
 }

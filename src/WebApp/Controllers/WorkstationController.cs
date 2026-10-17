@@ -1,5 +1,5 @@
-﻿using ApplicationCore.Services;
-using Domain.Models.Workstations;
+﻿using ApplicationCore.Dtos.WorkStations;
+using ApplicationCore.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
@@ -13,14 +13,22 @@ public class WorkstationController : Controller
     public WorkstationController(WorkstationService service) =>
         _service = service;
 
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] CreatedWorkstationDto dto)
+    {
+        await _service.Create(dto);
+
+        return Created();
+    }
+
     [HttpGet]
-    public async Task<List<Workstation>> GetAll() =>
+    public async Task<List<WorkstationResponse>> GetAll() =>
         await _service.GetAllAsync();
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Workstation>> Get(int id)
+    public async Task<ActionResult<WorkstationResponse>> Get(int id)
     {
-        Workstation? workstation = await _service.GetAsync(id);
+        WorkstationResponse? workstation = await _service.GetAsync(id);
 
         if (workstation == null)
             return NotFound();
@@ -35,6 +43,28 @@ public class WorkstationController : Controller
 
         if (result == false)
             return NotFound();
+
+        return Ok();
+    }
+
+    [HttpPut("AddDisk")]
+    public async Task<IActionResult> AddDisk([FromRoute] int workstationId, [FromRoute] int npmId)
+    {
+        bool result = await _service.AddDisk(workstationId, npmId);
+
+        if (result == false)
+            return UnprocessableEntity();
+
+        return Ok();
+    }
+
+    [HttpPut("RemoveDisk")]
+    public async Task<IActionResult> RemoveDisk([FromRoute] int workstationId, [FromRoute] int npmId)
+    {
+        bool result = await _service.RemoveDisk(workstationId, npmId);
+
+        if (result == false)
+            return UnprocessableEntity();
 
         return Ok();
     }

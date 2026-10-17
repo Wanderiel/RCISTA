@@ -1,8 +1,10 @@
-﻿namespace ApplicationCore.Dtos.NPMs;
+﻿using Domain.Models.NPMs;
 
-public class CreatedNPMdto
+namespace ApplicationCore.Dtos.NPMs;
+
+public class NpmRequest
 {
-    public required string Type { get; set; }
+    public required NpmType Type { get; set; }
     public required string Manufacturer { get; set; }
     public required string Model { get; set; }
     public required string SerialNumber { get; set; }

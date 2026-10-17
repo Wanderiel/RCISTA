@@ -34,7 +34,7 @@ public class UserService
         if (user == null)
             return false;
 
-        _repository.Delete(user);
+        user.Block();
         await _unitOfWork.SaveChangesAsync();
 
         return true;

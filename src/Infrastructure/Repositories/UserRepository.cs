@@ -26,7 +26,4 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> HasUserByLoginAsync(string login) =>
         await _context.Users.AnyAsync(u => u.Login == login);
-
-    public void Delete(User user) =>
-        _context.Users.Remove(user);
 }

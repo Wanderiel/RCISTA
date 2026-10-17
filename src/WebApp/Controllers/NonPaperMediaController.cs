@@ -1,6 +1,5 @@
 ﻿using ApplicationCore.Dtos.NPMs;
 using ApplicationCore.Services;
-using Domain.Models.NPMs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
@@ -11,13 +10,11 @@ public class NonPaperMediaController : Controller
 {
     private readonly NonPaperMediaService _service;
 
-    public NonPaperMediaController(NonPaperMediaService npmService)
-    {
+    public NonPaperMediaController(NonPaperMediaService npmService) =>
         _service = npmService;
-    }
 
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] CreatedNPMdto dto)
+    public async Task<ActionResult> Create([FromBody] NpmRequest dto)
     {
         await _service.Create(dto);
 
@@ -25,13 +22,13 @@ public class NonPaperMediaController : Controller
     }
 
     [HttpGet]
-    public async Task<List<NonPaperMedia>> GetAll() =>
+    public async Task<List<NpmResponse>> GetAll() =>
         await _service.GetAllAsync();
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<NonPaperMedia>> Get(int id)
+    public async Task<ActionResult> Get(int id)
     {
-        NonPaperMedia? nonPaperMedia = await _service.GetAsync(id);
+        NpmResponse? nonPaperMedia = await _service.GetAsync(id);
 
         if (nonPaperMedia == null)
             return NotFound();
@@ -46,6 +43,17 @@ public class NonPaperMediaController : Controller
 
         if (result == false)
             return NotFound();
+
+        return Ok();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdatedNPMDto npmDto)
+    {
+        bool result = await _service.UpdateAsync(id, npmDto);
+
+        if (result == false)
+            return BadRequest();
 
         return Ok();
     }

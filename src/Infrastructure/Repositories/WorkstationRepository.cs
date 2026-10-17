@@ -12,12 +12,22 @@ public class WorkstationRepository : IWorkstationRepository
     public WorkstationRepository(SQLiteContext context) =>
         _context = context;
 
+    public void Insert(Workstation workstation) =>
+        _context.Workstations.Add(workstation);
+
     public async Task<List<Workstation>> GetAllAsync() =>
-        await _context.Workstations.ToListAsync();
+        await _context.Workstations
+            .Include(w => w.Disks)
+                .ThenInclude(d => d.Manufacturer)
+            .Include(w => w.Disks)
+                .ThenInclude(d => d.Model)
+            .ToListAsync();
 
     public async Task<Workstation?> GetByIdAsync(WorkstationId workstationId) =>
-        await _context.Workstations.FindAsync(workstationId);
-
-    public void Delete(Workstation workstation) =>
-        _context.Remove(workstation);
+        await _context.Workstations
+            .Include(w => w.Disks)
+                .ThenInclude(d => d.Manufacturer)
+            .Include(w => w.Disks)
+                .ThenInclude(d => d.Model)
+            .FirstOrDefaultAsync(w => w.Id == workstationId);
 }
