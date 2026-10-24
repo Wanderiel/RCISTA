@@ -7,9 +7,9 @@ namespace Infrastructure.Repositories;
 
 public class ModelRepository : IModelRepository
 {
-    private readonly SQLiteContext _context;
+    private readonly PostgresContext _context;
 
-    public ModelRepository(SQLiteContext context) =>
+    public ModelRepository(PostgresContext context) =>
         _context = context;
 
     public async Task<Model> GetOrCreateByNameAsync(string name, CancellationToken cancellationToken = default)

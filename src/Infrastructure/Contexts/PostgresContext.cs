@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Contexts;
 
-public class SQLiteContext : DbContext, IUnitOfWork
+public class PostgresContext : DbContext, IUnitOfWork
 {
-    public SQLiteContext(DbContextOptions<SQLiteContext> options) : base(options) =>
+    public PostgresContext(DbContextOptions<PostgresContext> options) : base(options) =>
         Database.EnsureCreated();
 
     public DbSet<User> Users { get; set; }

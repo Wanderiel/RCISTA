@@ -7,9 +7,9 @@ namespace Infrastructure.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly SQLiteContext _context;
+    private readonly PostgresContext _context;
 
-    public UserRepository(SQLiteContext context) =>
+    public UserRepository(PostgresContext context) =>
         _context = context;
 
     public void Insert(User user) =>

@@ -7,9 +7,9 @@ namespace Infrastructure.Repositories;
 
 public class NonPaperMediaRepository : INonPaperMediaRepository
 {
-    private readonly SQLiteContext _context;
+    private readonly PostgresContext _context;
 
-    public NonPaperMediaRepository(SQLiteContext context) =>
+    public NonPaperMediaRepository(PostgresContext context) =>
         _context = context;
 
     public void Insert(NonPaperMedia nonPaperMedia) =>
