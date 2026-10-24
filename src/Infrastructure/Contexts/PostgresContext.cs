@@ -10,8 +10,7 @@ namespace Infrastructure.Contexts;
 
 public class PostgresContext : DbContext, IUnitOfWork
 {
-    public PostgresContext(DbContextOptions<PostgresContext> options) : base(options) =>
-        Database.EnsureCreated();
+    public PostgresContext(DbContextOptions<PostgresContext> options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
     public DbSet<Workstation> Workstations { get; set; }
