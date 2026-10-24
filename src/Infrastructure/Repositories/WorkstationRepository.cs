@@ -7,9 +7,9 @@ namespace Infrastructure.Repositories;
 
 public class WorkstationRepository : IWorkstationRepository
 {
-    private readonly SQLiteContext _context;
+    private readonly PostgresContext _context;
 
-    public WorkstationRepository(SQLiteContext context) =>
+    public WorkstationRepository(PostgresContext context) =>
         _context = context;
 
     public void Insert(Workstation workstation) =>

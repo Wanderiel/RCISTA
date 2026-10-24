@@ -18,9 +18,9 @@ builder.Services.AddSwaggerGen();
 if (builder.Environment.EnvironmentName == PROFILE_LOCAL)
     builder.Configuration.AddUserSecrets<Program>();
 
-builder.Services.AddDbContext<IUnitOfWork, SQLiteContext>(options =>
+builder.Services.AddDbContext<IUnitOfWork, PostgresContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("SQLite"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
 });
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();

@@ -7,9 +7,9 @@ namespace Infrastructure.Repositories;
 
 public class ManufacturerRepository : IManufacturerRepository
 {
-    private readonly SQLiteContext _context;
+    private readonly PostgresContext _context;
 
-    public ManufacturerRepository(SQLiteContext context) =>
+    public ManufacturerRepository(PostgresContext context) =>
         _context = context;
 
     public async Task<Manufacturer> GetOrCreateByNameAsync(string name, CancellationToken cancellationToken = default)
