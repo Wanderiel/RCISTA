@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Interfaces;
 using Domain.Interfaces;
 using Domain.Models.Base;
+using Domain.Models.History;
 using Domain.Models.NPMs;
 using Domain.Models.Users;
 using Domain.Models.Workstations;
@@ -17,6 +18,7 @@ public class PostgresContext : DbContext, IUnitOfWork
     public DbSet<NonPaperMedia> NonPaperMedias { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
     public DbSet<Model> Models { get; set; }
+    public DbSet<WorkstationStateRecord> WorkstationStateRecords { get; set; }
 
     public override int SaveChanges()
     {
@@ -70,7 +72,7 @@ public class PostgresContext : DbContext, IUnitOfWork
             builder.HasIndex(w => w.InventoryNumber)
                 .IsUnique();
 
-            builder.HasMany(w => w.Disks)
+            builder.HasMany(w => w.WorkstationStateRecords)
                 .WithOne()
                 .HasForeignKey("WorkstationId")
                 .OnDelete(DeleteBehavior.Cascade);
@@ -126,6 +128,27 @@ public class PostgresContext : DbContext, IUnitOfWork
 
             builder.HasIndex(model => model.Name)
                 .IsUnique();
+        });
+
+        modelBuilder.Entity<WorkstationStateRecord>(builder =>
+        {
+            builder.HasKey(p => p.Id);
+
+            builder.Property(p => p.Id)
+                .HasConversion(
+                    wsrId => wsrId.Value,
+                    id => new WsrId(id))
+                .ValueGeneratedOnAdd();
+
+            builder.HasOne(wsr => wsr.Workstation)
+                .WithMany()
+                .HasForeignKey("WorkstationId")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(w => w.Disks)
+                .WithOne()
+                .HasForeignKey("WsrId")
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         base.OnModelCreating(modelBuilder);

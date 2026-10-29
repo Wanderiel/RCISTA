@@ -195,7 +195,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.Workstations.Workstation", null)
-                        .WithMany("Disks")
+                        .WithMany("WorkstationStateRecords")
                         .HasForeignKey("WorkstationId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -240,7 +240,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Workstations.Workstation", b =>
                 {
-                    b.Navigation("Disks");
+                    b.Navigation("WorkstationStateRecords");
                 });
 #pragma warning restore 612, 618
         }

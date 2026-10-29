@@ -11,7 +11,7 @@ public static class WorkstationExstentions
         {
             InventoryNumber = workstation.InventoryNumber,
             IsDecommissioned = workstation.IsDecommissioned,
-            Disks = workstation.Disks.Select(d => d.ToDto()).ToList(),
+            Disks = workstation.WorkstationStateRecords.Select(d => d.ToDto()).ToList(),
         };
     }
 }
