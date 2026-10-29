@@ -72,7 +72,7 @@ public class PostgresContext : DbContext, IUnitOfWork
             builder.HasIndex(w => w.InventoryNumber)
                 .IsUnique();
 
-            builder.HasMany(w => w.WorkstationStateRecords)
+            builder.HasMany(w => w.Disks)
                 .WithOne()
                 .HasForeignKey("WorkstationId")
                 .OnDelete(DeleteBehavior.Cascade);

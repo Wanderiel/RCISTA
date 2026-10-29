@@ -17,17 +17,17 @@ public class WorkstationRepository : IWorkstationRepository
 
     public async Task<List<Workstation>> GetAllAsync() =>
         await _context.Workstations
-            .Include(w => w.WorkstationStateRecords)
+            .Include(w => w.Disks)
                 .ThenInclude(d => d.Manufacturer)
-            .Include(w => w.WorkstationStateRecords)
+            .Include(w => w.Disks)
                 .ThenInclude(d => d.Model)
             .ToListAsync();
 
     public async Task<Workstation?> GetByIdAsync(WorkstationId workstationId) =>
         await _context.Workstations
-            .Include(w => w.WorkstationStateRecords)
+            .Include(w => w.Disks)
                 .ThenInclude(d => d.Manufacturer)
-            .Include(w => w.WorkstationStateRecords)
+            .Include(w => w.Disks)
                 .ThenInclude(d => d.Model)
             .FirstOrDefaultAsync(w => w.Id == workstationId);
 }

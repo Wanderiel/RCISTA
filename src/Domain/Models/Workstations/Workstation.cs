@@ -1,5 +1,4 @@
 ﻿using Domain.Interfaces;
-using Domain.Models.History;
 using Domain.Models.NPMs;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,13 +20,13 @@ public class Workstation : IChangedAt
     //public UserId ChangedId { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    public List<WorkstationStateRecord> WorkstationStateRecords { get; private set; } = [];
+    public List<NonPaperMedia> Disks { get; private set; } = [];
 
     public void AddDisk(NonPaperMedia disk) =>
-        throw new Exception();
+        Disks.Add(disk);
 
     public void RemoveDisk(NonPaperMedia disk) =>
-        throw new Exception();
+        Disks.Remove(disk);
 
     public void WriteOff() =>
         IsDecommissioned = true;
