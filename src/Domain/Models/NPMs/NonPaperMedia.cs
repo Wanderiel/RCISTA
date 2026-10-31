@@ -46,4 +46,7 @@ public class NonPaperMedia : IChangedAt
 
     public void Repair() =>
         Status = NpmStatus.Good;
+
+    public override string ToString() =>
+        string.Format("{0} {1} {2}, с/н: {3}, объём: {4}", Type.ToString(), Manufacturer, Model, SerialNumber, Capacity);
 }
