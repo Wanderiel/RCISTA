@@ -18,7 +18,7 @@ public class PostgresContext : DbContext, IUnitOfWork
     public DbSet<NonPaperMedia> NonPaperMedias { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
     public DbSet<Model> Models { get; set; }
-    public DbSet<WorkstationHistoryItem> WorkstationStateRecords { get; set; }
+    public DbSet<WorkstationHistoryItem> WorkstationHistoryItems { get; set; }
 
     public override int SaveChanges()
     {

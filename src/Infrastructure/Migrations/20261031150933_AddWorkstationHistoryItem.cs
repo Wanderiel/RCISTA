@@ -19,7 +19,7 @@ namespace Infrastructure.Migrations
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "WorkstationStateRecords",
+                name: "WorkstationHistoryItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -45,7 +45,7 @@ namespace Infrastructure.Migrations
                 name: "FK_NonPaperMedias_WorkstationStateRecords_WorkstationHistoryIt~",
                 table: "NonPaperMedias",
                 column: "WorkstationHistoryItemId",
-                principalTable: "WorkstationStateRecords",
+                principalTable: "WorkstationHistoryItems",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -58,7 +58,7 @@ namespace Infrastructure.Migrations
                 table: "NonPaperMedias");
 
             migrationBuilder.DropTable(
-                name: "WorkstationStateRecords");
+                name: "WorkstationHistoryItems");
 
             migrationBuilder.DropIndex(
                 name: "IX_NonPaperMedias_WorkstationHistoryItemId",

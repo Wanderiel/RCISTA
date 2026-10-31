@@ -78,7 +78,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkstationStateRecords");
+                    b.ToTable("WorkstationHistoryItems");
                 });
 
             modelBuilder.Entity("Domain.Models.NPMs.Model", b =>
