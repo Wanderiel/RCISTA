@@ -18,7 +18,7 @@ public class PostgresContext : DbContext, IUnitOfWork
     public DbSet<NonPaperMedia> NonPaperMedias { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
     public DbSet<Model> Models { get; set; }
-    public DbSet<WorkstationStateRecord> WorkstationStateRecords { get; set; }
+    public DbSet<WorkstationHistoryItem> WorkstationStateRecords { get; set; }
 
     public override int SaveChanges()
     {
@@ -130,24 +130,42 @@ public class PostgresContext : DbContext, IUnitOfWork
                 .IsUnique();
         });
 
-        modelBuilder.Entity<WorkstationStateRecord>(builder =>
+        modelBuilder.Entity<WorkstationHistoryItem>(builder =>
         {
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Id)
                 .HasConversion(
-                    wsrId => wsrId.Value,
-                    id => new WsrId(id))
+                    wshId => wshId.Value,
+                    id => new WsHId(id))
                 .ValueGeneratedOnAdd();
 
-            builder.HasOne(wsr => wsr.Workstation)
-                .WithMany()
-                .HasForeignKey("WorkstationId")
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(p => p.WorkstationId)
+                .HasConversion(
+                    workstationId => workstationId.Value,
+                    id => new WorkstationId(id))
+                .IsRequired();
+
+            builder.Property(p => p.ActionDate)
+                .IsRequired();
+
+            builder.Property(p => p.WorkDescription)
+                .HasMaxLength(250)
+                .IsRequired();
+
+            builder.Property(p => p.UserId)
+                .HasConversion(
+                    userId => userId.Value,
+                    id => new UserId(id))
+                .IsRequired();
+
+            builder.Property(p => p.TaskNumber)
+                .HasMaxLength(100)
+                .IsRequired();
 
             builder.HasMany(w => w.Disks)
                 .WithOne()
-                .HasForeignKey("WsrId")
+
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

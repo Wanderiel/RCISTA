@@ -153,7 +153,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Domain.Models.Workstations.Workstation", b =>
+            modelBuilder.Entity("Domain.Models.Workstations.WorkstationId", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -197,7 +197,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.Workstations.Workstation", null)
+                    b.HasOne("Domain.Models.Workstations.WorkstationId", null)
                         .WithMany("Disks")
                         .HasForeignKey("WorkstationId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -241,7 +241,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Models.Workstations.Workstation", b =>
+            modelBuilder.Entity("Domain.Models.Workstations.WorkstationId", b =>
                 {
                     b.Navigation("Disks");
                 });

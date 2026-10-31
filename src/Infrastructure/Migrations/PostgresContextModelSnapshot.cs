@@ -43,6 +43,41 @@ namespace Infrastructure.Migrations
                     b.ToTable("Manufacturers");
                 });
 
+            modelBuilder.Entity("Domain.Models.History.WorkstationHistoryItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("ActionDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TaskNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("WorkDescription")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<int>("WorkstationId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkstationStateRecords");
+                });
+
             modelBuilder.Entity("Domain.Models.NPMs.Model", b =>
                 {
                     b.Property<int>("Id")
@@ -98,6 +133,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("WorkstationHistoryItemId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("WorkstationId")
                         .HasColumnType("integer");
 
@@ -109,6 +147,8 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("SerialNumber")
                         .IsUnique();
+
+                    b.HasIndex("WorkstationHistoryItemId");
 
                     b.HasIndex("WorkstationId");
 
@@ -194,6 +234,11 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Models.History.WorkstationHistoryItem", null)
+                        .WithMany("Disks")
+                        .HasForeignKey("WorkstationHistoryItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Domain.Models.Workstations.Workstation", null)
                         .WithMany("Disks")
                         .HasForeignKey("WorkstationId")
@@ -236,6 +281,11 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("FullName")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.History.WorkstationHistoryItem", b =>
+                {
+                    b.Navigation("Disks");
                 });
 
             modelBuilder.Entity("Domain.Models.Workstations.Workstation", b =>
