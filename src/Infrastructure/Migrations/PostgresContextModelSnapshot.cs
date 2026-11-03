@@ -75,6 +75,10 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WorkstationId");
+
                     b.ToTable("WorkstationHistoryItems");
                 });
 
@@ -218,6 +222,25 @@ namespace Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Workstations");
+                });
+
+            modelBuilder.Entity("Domain.Models.History.WorkstationHistoryItem", b =>
+                {
+                    b.HasOne("Domain.Models.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Workstations.Workstation", "Workstation")
+                        .WithMany()
+                        .HasForeignKey("WorkstationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Workstation");
                 });
 
             modelBuilder.Entity("Domain.Models.NPMs.NonPaperMedia", b =>

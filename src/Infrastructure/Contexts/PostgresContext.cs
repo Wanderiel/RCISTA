@@ -140,10 +140,9 @@ public class PostgresContext : DbContext, IUnitOfWork
                     id => new WsHId(id))
                 .ValueGeneratedOnAdd();
 
-            builder.Property(p => p.WorkstationId)
-                .HasConversion(
-                    workstationId => workstationId.Value,
-                    id => new WorkstationId(id))
+            builder.HasOne(e => e.Workstation)
+                .WithMany()
+                .HasForeignKey("WorkstationId")
                 .IsRequired();
 
             builder.Property(p => p.ActionDate)
@@ -153,10 +152,9 @@ public class PostgresContext : DbContext, IUnitOfWork
                 .HasMaxLength(250)
                 .IsRequired();
 
-            builder.Property(p => p.UserId)
-                .HasConversion(
-                    userId => userId.Value,
-                    id => new UserId(id))
+            builder.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey("UserId")
                 .IsRequired();
 
             builder.Property(p => p.TaskNumber)
@@ -165,7 +163,6 @@ public class PostgresContext : DbContext, IUnitOfWork
 
             builder.HasMany(w => w.Disks)
                 .WithOne()
-
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

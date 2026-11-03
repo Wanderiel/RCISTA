@@ -9,18 +9,18 @@ public class WorkstationHistoryItem
     private WorkstationHistoryItem() { }
 
     public WorkstationHistoryItem(
-        WorkstationId workstationId,
+        Workstation workstation,
         DateOnly? actionDate,
         string workDescription,
         string taksNumber,
-        UserId userId,
+        User user,
         List<NonPaperMedia>? disks,
         string? remarks)
     {
-        WorkstationId = workstationId;
+        Workstation = workstation;
         WorkDescription = workDescription;
         TaskNumber = taksNumber;
-        UserId = userId;
+        User = user;
         Disks = disks?.ToList();
         Remarks = remarks;
 
@@ -29,11 +29,11 @@ public class WorkstationHistoryItem
     }
 
     public WsHId Id { get; }
-    public WorkstationId WorkstationId { get; }
+    public Workstation Workstation { get; }
     public DateOnly ActionDate { get; }
     public string WorkDescription { get; private set; } = string.Empty;
     public string TaskNumber { get; private set; } = string.Empty;
-    public UserId UserId { get; private set; }
+    public User User { get; private set; }
     public List<NonPaperMedia>? Disks { get; }
     public string? Remarks { get; private set; }
 }
