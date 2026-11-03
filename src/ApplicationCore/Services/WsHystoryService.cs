@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Dtos.WsHistory;
+using ApplicationCore.Extentions;
 using ApplicationCore.Interfaces;
 
 namespace ApplicationCore.Services;
@@ -14,8 +15,8 @@ public class WsHystoryService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<WsHistoryResponse> GetAllAsync()
+    public async Task<List<WsHistoryResponse>> GetAllAsync()
     {
-        return null;
+        return (await _repository.GetAllAsync()).Select(r => r.ToDto()).ToList();
     }
 }
