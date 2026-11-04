@@ -25,7 +25,7 @@ public class Workstation : IChangedAt
     public void AddDisk(NonPaperMedia disk) =>
         Disks.Add(disk);
 
-    public void RemoveDisk(NonPaperMedia disk) =>
+    public bool RemoveDisk(NonPaperMedia disk) =>
         Disks.Remove(disk);
 
     public void WriteOff() =>

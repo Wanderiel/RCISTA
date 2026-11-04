@@ -59,17 +59,13 @@ public class WorkstationService
             return false;
 
         NpmId npmId = new NpmId(diskId);
-        NonPaperMedia? disk = workstation.Disks.FirstOrDefault(d => d.Id == npmId);
-
-        if (disk == null)
-            disk = await _npmRepository.GetByIdAsync(npmId);
-        else
-            return false;
+        NonPaperMedia? disk = await _npmRepository.GetByIdAsync(npmId);
+        //NonPaperMedia? disk = workstation.Disks.FirstOrDefault(d => d.Id == npmId);
 
         if (disk == null)
             return false;
 
-        workstation.Disks.Add(disk);
+        workstation.AddDisk(disk);
         await _unitOfWork.SaveChangesAsync();
 
         return true;
@@ -89,7 +85,9 @@ public class WorkstationService
         if (disk == null)
             return false;
 
-        workstation.Disks.Remove(disk);
+        if (workstation.RemoveDisk(disk) == false)
+            return false;
+
         await _unitOfWork.SaveChangesAsync();
 
         return true;

@@ -14,14 +14,13 @@ public class WorkstationHistoryItem
         string workDescription,
         string taksNumber,
         User user,
-        List<NonPaperMedia>? disks,
         string? remarks)
     {
         Workstation = workstation;
         WorkDescription = workDescription;
         TaskNumber = taksNumber;
         User = user;
-        Disks = disks?.ToList();
+        Disks = workstation.Disks?.ToList();
         Remarks = remarks;
 
         if (actionDate == null)
