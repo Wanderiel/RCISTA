@@ -52,6 +52,4 @@ public class Workstation : IChangedAt
 
     public bool HasDisk(NpmId id)
         => Disks.Any(d => d.Id == id);
-
-    private
 }
