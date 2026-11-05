@@ -52,18 +52,11 @@ public class WorkstationService
 
     public async Task<bool> AddDisk(int workstationId, int diskId)
     {
-        WorkstationId id = new WorkstationId(workstationId);
-        Workstation? workstation = await _repository.GetByIdAsync(id);
+        Workstation workstation = await GetWorkstation(workstationId);
+        NonPaperMedia disk = await GetDisk(diskId);
 
-        if (workstation == null)
-            return false;
-
-        NpmId npmId = new NpmId(diskId);
-        NonPaperMedia? disk = await _npmRepository.GetByIdAsync(npmId);
-        //NonPaperMedia? disk = workstation.Disks.FirstOrDefault(d => d.Id == npmId);
-
-        if (disk == null)
-            return false;
+        if (await _npmRepository.IsAvailableAsync(disk.Id) == false)
+            throw new InvalidOperationException($"Диск (s/n: {disk.SerialNumber}) уже установлен в другую рабочую станцию.");
 
         workstation.AddDisk(disk);
         await _unitOfWork.SaveChangesAsync();
@@ -73,23 +66,32 @@ public class WorkstationService
 
     public async Task<bool> RemoveDisk(int workstationId, int diskId)
     {
-        WorkstationId id = new WorkstationId(workstationId);
-        Workstation? workstation = await _repository.GetByIdAsync(id);
+        Workstation workstation = await GetWorkstation(workstationId);
+        NonPaperMedia disk = await GetDisk(diskId);
 
-        if (workstation == null)
-            return false;
-
-        NpmId npmId = new NpmId(diskId);
-        NonPaperMedia? disk = workstation.Disks.FirstOrDefault(d => d.Id == npmId);
-
-        if (disk == null)
-            return false;
-
-        if (workstation.RemoveDisk(disk) == false)
-            return false;
+        if (workstation.HasDisk(disk.Id))
+            workstation.RemoveDisk(disk);
 
         await _unitOfWork.SaveChangesAsync();
 
         return true;
+    }
+
+    private async Task<Workstation> GetWorkstation(int workstationId)
+    {
+        WorkstationId id = new WorkstationId(workstationId);
+        Workstation? workstation = await _repository.GetByIdAsync(id)
+            ?? throw new InvalidOperationException($"Рабочая станция c ID {workstationId} не найдена.");
+
+        return workstation;
+    }
+
+    private async Task<NonPaperMedia> GetDisk(int diskId)
+    {
+        NpmId npmId = new NpmId(diskId);
+        NonPaperMedia? disk = await _npmRepository.GetByIdAsync(npmId)
+            ?? throw new InvalidOperationException($"Диск с ID {diskId} не найден.");
+
+        return disk;
     }
 }

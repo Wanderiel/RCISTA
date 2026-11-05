@@ -22,15 +22,36 @@ public class Workstation : IChangedAt
     public DateTime UpdatedAt { get; set; }
     public List<NonPaperMedia> Disks { get; private set; } = [];
 
-    public void AddDisk(NonPaperMedia disk) =>
-        Disks.Add(disk);
+    public void AddDisk(NonPaperMedia disk)
+    {
+        if (HasDisk(disk.Id))
+            throw new InvalidOperationException(
+                $"Диск (s/n: {disk.SerialNumber}) уже присуствует в рабочей станции {InventoryNumber}.)");
 
-    public bool RemoveDisk(NonPaperMedia disk) =>
-        Disks.Remove(disk);
+        Disks.Add(disk);
+    }
+
+    public void RemoveDisk(NonPaperMedia disk)
+    {
+        if (HasDisk(disk.Id) == false)
+            throw new InvalidOperationException(
+                $"Диск (s/n: {disk.SerialNumber}) отсутствует в рабочей станции {InventoryNumber}.)");
+
+        NonPaperMedia? removedDisk = Disks.FirstOrDefault(d => d.Id == disk.Id)
+            ?? throw new InvalidOperationException(
+                $"Диск не найден в рабочей станции {InventoryNumber}.)");
+
+        Disks.Remove(removedDisk);
+    }
 
     public void WriteOff() =>
         IsDecommissioned = true;
 
     public void ToRegister() =>
         IsDecommissioned = false;
+
+    public bool HasDisk(NpmId id)
+        => Disks.Any(d => d.Id == id);
+
+    private
 }

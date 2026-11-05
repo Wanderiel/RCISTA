@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Interfaces;
 using Domain.Models.NPMs;
+using Domain.Models.Workstations;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,4 +27,8 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
             .Include(npm => npm.Manufacturer)
             .Include(d => d.Model)
             .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+
+    public async Task<bool> IsAvailableAsync(NpmId id, CancellationToken cancellationToken = default) =>
+        await _context.NonPaperMedias.AnyAsync(
+            disk => disk.Id == id && EF.Property<WorkstationId?>(disk, "WorkstationId") == null, cancellationToken);
 }

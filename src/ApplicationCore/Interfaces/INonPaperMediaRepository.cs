@@ -7,4 +7,5 @@ public interface INonPaperMediaRepository
     void Insert(NonPaperMedia nonPaperMedia);
     Task<List<NonPaperMedia>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<NonPaperMedia?> GetByIdAsync(NpmId id, CancellationToken cancellationToken = default);
+    Task<bool> IsAvailableAsync(NpmId id, CancellationToken cancellationToken = default);
 }
