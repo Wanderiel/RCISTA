@@ -9,12 +9,18 @@ namespace ApplicationCore.Services;
 public class WorkstationService
 {
     private readonly IWorkstationRepository _repository;
+    private readonly IWsHistoryRepository _historyRepository;
     private readonly INonPaperMediaRepository _npmRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public WorkstationService(IWorkstationRepository repository, INonPaperMediaRepository npmRepository, IUnitOfWork unitOfWork)
+    public WorkstationService(
+        IWorkstationRepository repository,
+        IWsHistoryRepository historyRepository,
+        INonPaperMediaRepository npmRepository,
+        IUnitOfWork unitOfWork)
     {
         _repository = repository;
+        _historyRepository = historyRepository;
         _npmRepository = npmRepository;
         _unitOfWork = unitOfWork;
     }

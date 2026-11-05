@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class WsHystoryRepository : IWsHystoryRepository
+public class WsHistoryRepository : IWsHistoryRepository
 {
     private PostgresContext _context;
 
-    public WsHystoryRepository(PostgresContext context) =>
+    public WsHistoryRepository(PostgresContext context) =>
         _context = context;
 
     public void Insert(WorkstationHistoryItem item) =>

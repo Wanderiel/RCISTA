@@ -20,9 +20,10 @@ public class WorkstationHistoryItem
         WorkDescription = workDescription;
         TaskNumber = taksNumber;
         User = user;
-        Disks = workstation.Disks?.ToList();
+        Disks = workstation?.Disks?.ToList();
         Remarks = remarks;
 
+        //TODO добавить проверку на завтрашний день
         if (actionDate == null)
             ActionDate = DateOnly.FromDateTime(DateTime.Now);
     }

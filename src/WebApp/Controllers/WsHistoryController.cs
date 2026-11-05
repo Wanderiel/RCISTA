@@ -8,9 +8,9 @@ namespace WebApp.Controllers;
 [Route("[controller]")]
 public class WsHistoryController : Controller
 {
-    private readonly WsHystoryService _service;
+    private readonly WsHistoryService _service;
 
-    public WsHistoryController(WsHystoryService service) =>
+    public WsHistoryController(WsHistoryService service) =>
         _service = service;
 
     [HttpGet]

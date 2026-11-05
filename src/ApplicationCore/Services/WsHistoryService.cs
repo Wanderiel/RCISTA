@@ -4,14 +4,14 @@ using ApplicationCore.Interfaces;
 
 namespace ApplicationCore.Services;
 
-public class WsHystoryService
+public class WsHistoryService
 {
-    private readonly IWsHystoryRepository _repository;
+    private readonly IWsHistoryRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public WsHystoryService(IWsHystoryRepository wsHystoryRepository, IUnitOfWork unitOfWork)
+    public WsHistoryService(IWsHistoryRepository wsHistoryRepository, IUnitOfWork unitOfWork)
     {
-        _repository = wsHystoryRepository;
+        _repository = wsHistoryRepository;
         _unitOfWork = unitOfWork;
     }
 

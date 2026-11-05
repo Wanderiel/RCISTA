@@ -2,7 +2,7 @@
 
 namespace ApplicationCore.Interfaces;
 
-public interface IWsHystoryRepository
+public interface IWsHistoryRepository
 {
     void Insert(WorkstationHistoryItem item);
     Task<List<WorkstationHistoryItem>> GetAllAsync(CancellationToken cancellationToken = default);
