@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Dtos.WorkStations;
+using ApplicationCore.Dtos.WsHistory;
 using ApplicationCore.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,14 @@ public class WorkstationController : Controller
 
         if (result == false)
             return NotFound();
+
+        return Ok();
+    }
+
+    [HttpPut("CreateTask")]
+    public async Task<IActionResult> CreateTask([FromBody] TaskRequest taskDto, CancellationToken cancellationToken)
+    {
+        await _service.CreateTask(taskDto, cancellationToken);
 
         return Ok();
     }

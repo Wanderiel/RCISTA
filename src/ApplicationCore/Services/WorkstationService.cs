@@ -1,6 +1,8 @@
 ﻿using ApplicationCore.Dtos.WorkStations;
+using ApplicationCore.Dtos.WsHistory;
 using ApplicationCore.Extentions;
 using ApplicationCore.Interfaces;
+using Domain.Models.History;
 using Domain.Models.NPMs;
 using Domain.Models.Workstations;
 
@@ -54,6 +56,23 @@ public class WorkstationService
         await _unitOfWork.SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task CreateTask(TaskRequest taskDto, CancellationToken cancellationToken)
+    {
+        Workstation workstation = await GetWorkstation(taskDto.WorkstationId);
+        string remarks = taskDto.Remarks;
+
+        if (taskDto.RemovedDisks.Count > 0)
+            Console.WriteLine();
+
+        if (taskDto.AddedDisks.Count > 0)
+            Console.WriteLine();
+
+        WorkstationHistoryItem historyItem = new WorkstationHistoryItem(
+            workstation, taskDto.ActionDate, taskDto.Description, taskDto.Number, user, remarks);
+
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<bool> AddDisk(int workstationId, int diskId)
