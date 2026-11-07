@@ -24,6 +24,6 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetByLoginAsync(string login) =>
         await _context.Users.FirstOrDefaultAsync(u => u.Login == login);
 
-    public async Task<bool> HasUserByLoginAsync(string login) =>
-        await _context.Users.AnyAsync(u => u.Login == login);
+    public async Task<bool> HasUserByLoginAsync(string login, CancellationToken cancellationToken = default) =>
+        await _context.Users.AnyAsync(u => u.Login == login, cancellationToken);
 }

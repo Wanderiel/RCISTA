@@ -8,5 +8,5 @@ public interface IUserRepository
     Task<List<User>> GetAllAsync();
     Task<User?> GetByIdAsync(UserId id);
     Task<User?> GetByLoginAsync(string login);
-    Task<bool> HasUserByLoginAsync(string login);
+    Task<bool> HasUserByLoginAsync(string login, CancellationToken cancellationToken = default);
 }

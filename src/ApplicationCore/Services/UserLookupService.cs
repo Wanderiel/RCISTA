@@ -9,6 +9,6 @@ public class UserLookupService : IUserLookup
     public UserLookupService(IUserRepository repository) =>
         _repository = repository;
 
-    public async Task<bool> HasUserByLoginAsync(string username) =>
-        await _repository.HasUserByLoginAsync(username);
+    public async Task<bool> HasUserByLoginAsync(string username, CancellationToken cancellationToken = default) =>
+        await _repository.HasUserByLoginAsync(username, cancellationToken);
 }

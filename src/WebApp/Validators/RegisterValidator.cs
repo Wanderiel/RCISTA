@@ -37,6 +37,6 @@ public class RegisterValidator : AbstractValidator<RegisteredUserDto>
             .Equal(x => x.Password1).WithMessage("Пароли должны совпадать.");
     }
 
-    private async Task<bool> IsLoginAvailable(string username, CancellationToken token) =>
-        await _userLookup.HasUserByLoginAsync(username) == false;
+    private async Task<bool> IsLoginAvailable(string username, CancellationToken cancellationToken = default) =>
+        await _userLookup.HasUserByLoginAsync(username, cancellationToken) == false;
 }
