@@ -30,6 +30,6 @@ public class NpmValidator : AbstractValidator<NpmRequest>
             .GreaterThan(0).WithMessage("Ёмкость должна быть бльше нуля.");
     }
 
-    private async Task<bool> IsSerialnumberAvailable(string serialnumber, CancellationToken cancellationToken) =>
+    private async Task<bool> IsSerialnumberAvailable(string serialnumber, CancellationToken cancellationToken = default) =>
         await _lookup.HasNpmBySerialnumberAsync(serialnumber, cancellationToken);
 }
