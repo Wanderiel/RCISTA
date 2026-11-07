@@ -13,6 +13,8 @@ public class RegisterValidator : AbstractValidator<RegisteredUserDto>
 
     public RegisterValidator(IUserLookup userLookup)
     {
+        _userLookup = userLookup;
+
         RuleFor(x => x.Login)
             .NotEmpty().WithMessage("Логин пользователя не может быть пустым.")
             .MinimumLength(MinimumLengthUsername).WithMessage($"Логин пользователя должен содержать минимум {MinimumLengthUsername} символа.")
@@ -33,7 +35,6 @@ public class RegisterValidator : AbstractValidator<RegisteredUserDto>
 
         RuleFor(x => x.Password2)
             .Equal(x => x.Password1).WithMessage("Пароли должны совпадать.");
-        _userLookup = userLookup;
     }
 
     private async Task<bool> IsLoginAvailable(string username, CancellationToken token) =>
