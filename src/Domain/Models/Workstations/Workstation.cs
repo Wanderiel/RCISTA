@@ -22,26 +22,33 @@ public class Workstation : IChangedAt
     public DateTime UpdatedAt { get; set; }
     public List<NonPaperMedia> Disks { get; private set; } = [];
 
-    public void AddDisk(NonPaperMedia disk)
+    public void AddDisks(List<NonPaperMedia> disks)
     {
-        if (HasDisk(disk.Id))
-            throw new InvalidOperationException(
-                $"Диск (s/n: {disk.SerialNumber}) уже присуствует в рабочей станции {InventoryNumber}.)");
+        foreach (NonPaperMedia disk in disks)
+        {
+            if (HasDisk(disk.Id))
+                throw new InvalidOperationException(
+                    $"Диск (s/n: {disk.SerialNumber}) уже присуствует в рабочей станции {InventoryNumber}.)");
+        }
 
-        Disks.Add(disk);
+        Disks.AddRange(disks);
     }
 
-    public void RemoveDisk(NonPaperMedia disk)
+    public void RemoveDisks(List<NonPaperMedia> disks)
     {
-        if (HasDisk(disk.Id) == false)
-            throw new InvalidOperationException(
-                $"Диск (s/n: {disk.SerialNumber}) отсутствует в рабочей станции {InventoryNumber}.)");
+        List<NonPaperMedia> removedDisks = new List<NonPaperMedia>();
 
-        NonPaperMedia? removedDisk = Disks.FirstOrDefault(d => d.Id == disk.Id)
-            ?? throw new InvalidOperationException(
-                $"Диск не найден в рабочей станции {InventoryNumber}.)");
+        foreach (NonPaperMedia disk in disks)
+        {
+            NonPaperMedia? removedDisk = Disks.FirstOrDefault(d => d.Id == disk.Id)
+                ?? throw new InvalidOperationException(
+                    $"Диск не найден в рабочей станции {InventoryNumber}.)");
 
-        Disks.Remove(removedDisk);
+            removedDisks.Add(disk);
+        }
+
+        foreach (NonPaperMedia disk in removedDisks)
+            Disks.Remove(disk);
     }
 
     public void WriteOff() =>

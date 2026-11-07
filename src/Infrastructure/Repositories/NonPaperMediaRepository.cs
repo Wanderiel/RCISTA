@@ -28,6 +28,18 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
             .Include(d => d.Model)
             .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
+    public async Task<List<NonPaperMedia>> GetByIdsAsync(IEnumerable<NpmId> ids, CancellationToken cancellationToken = default)
+    {
+        if (ids.Any() == false)
+            return new List<NonPaperMedia>();
+
+        List<NonPaperMedia> result = await _context.NonPaperMedias
+            .Where(d => ids.Contains(d.Id))
+            .ToListAsync(cancellationToken);
+
+        return result;
+    }
+
     public async Task<bool> IsAvailableAsync(NpmId id, CancellationToken cancellationToken = default) =>
         await _context.NonPaperMedias.AnyAsync(
             disk => disk.Id == id && EF.Property<WorkstationId?>(disk, "WorkstationId") == null, cancellationToken);

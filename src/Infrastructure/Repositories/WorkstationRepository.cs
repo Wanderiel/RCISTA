@@ -15,19 +15,19 @@ public class WorkstationRepository : IWorkstationRepository
     public void Insert(Workstation workstation) =>
         _context.Workstations.Add(workstation);
 
-    public async Task<List<Workstation>> GetAllAsync() =>
+    public async Task<List<Workstation>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _context.Workstations
             .Include(w => w.Disks)
                 .ThenInclude(d => d.Manufacturer)
             .Include(w => w.Disks)
                 .ThenInclude(d => d.Model)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-    public async Task<Workstation?> GetByIdAsync(WorkstationId workstationId) =>
+    public async Task<Workstation?> GetByIdAsync(WorkstationId workstationId, CancellationToken cancellationToken = default) =>
         await _context.Workstations
             .Include(w => w.Disks)
                 .ThenInclude(d => d.Manufacturer)
             .Include(w => w.Disks)
                 .ThenInclude(d => d.Model)
-            .FirstOrDefaultAsync(w => w.Id == workstationId);
+            .FirstOrDefaultAsync(w => w.Id == workstationId, cancellationToken);
 }

@@ -49,31 +49,9 @@ public class WorkstationController : Controller
     }
 
     [HttpPut("CreateTask")]
-    public async Task<IActionResult> CreateTask([FromBody] TaskRequest taskDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateTask([FromBody] TaskRequest taskDto, CancellationToken cancellationToken = default)
     {
         await _service.CreateTask(taskDto, cancellationToken);
-
-        return Ok();
-    }
-
-    [HttpPut("AddDisk")]
-    public async Task<IActionResult> AddDisk([FromRoute] int workstationId, [FromRoute] int npmId)
-    {
-        bool result = await _service.AddDisk(workstationId, npmId);
-
-        if (result == false)
-            return UnprocessableEntity();
-
-        return Ok();
-    }
-
-    [HttpPut("RemoveDisk")]
-    public async Task<IActionResult> RemoveDisk([FromRoute] int workstationId, [FromRoute] int npmId)
-    {
-        bool result = await _service.RemoveDisk(workstationId, npmId);
-
-        if (result == false)
-            return UnprocessableEntity();
 
         return Ok();
     }

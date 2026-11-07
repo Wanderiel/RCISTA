@@ -1,10 +1,13 @@
 ﻿using ApplicationCore.Dtos.WorkStations;
 using ApplicationCore.Dtos.WsHistory;
+using ApplicationCore.Exceptions;
 using ApplicationCore.Extentions;
 using ApplicationCore.Interfaces;
 using Domain.Models.History;
 using Domain.Models.NPMs;
+using Domain.Models.Users;
 using Domain.Models.Workstations;
+using System.Text;
 
 namespace ApplicationCore.Services;
 
@@ -60,52 +63,72 @@ public class WorkstationService
 
     public async Task CreateTask(TaskRequest taskDto, CancellationToken cancellationToken)
     {
-        Workstation workstation = await GetWorkstation(taskDto.WorkstationId);
-        string remarks = taskDto.Remarks;
-
-        if (taskDto.RemovedDisks.Count > 0)
-            Console.WriteLine();
+        Workstation workstation = await GetWorkstation(taskDto.WorkstationId, cancellationToken);
+        StringBuilder remarksBuilder = new StringBuilder(taskDto.Remarks);
+        List<NonPaperMedia> addedDisks = [];
+        List<NonPaperMedia> removedDisks = [];
+        User user = new User("test", FullName.Create("test", "test", "test"), "12345678"); //TODO заглушка
 
         if (taskDto.AddedDisks.Count > 0)
-            Console.WriteLine();
+        {
+            remarksBuilder.AppendLine("Установлено в РС: ");
+            addedDisks = await FindDiskAsync(taskDto.AddedDisks, cancellationToken);
+
+            foreach (NonPaperMedia disk in addedDisks)
+                remarksBuilder.AppendLine(disk.ToString());
+        }
+
+        if (taskDto.RemovedDisks.Count > 0)
+        {
+            remarksBuilder.AppendLine("Изьято из РС: ");
+            removedDisks = await FindDiskAsync(taskDto.RemovedDisks, cancellationToken);
+
+            foreach (NonPaperMedia disk in removedDisks)
+                remarksBuilder.AppendLine(disk.ToString());
+        }
 
         WorkstationHistoryItem historyItem = new WorkstationHistoryItem(
-            workstation, taskDto.ActionDate, taskDto.Description, taskDto.Number, user, remarks);
+            workstation, taskDto.ActionDate, taskDto.Description, taskDto.Number, user, remarksBuilder.ToString());
 
-        await _unitOfWork.SaveChangesAsync();
+        await AddDisks(workstation, addedDisks, cancellationToken);
+        workstation.RemoveDisks(removedDisks);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<bool> AddDisk(int workstationId, int diskId)
+    private async Task<List<NonPaperMedia>> FindDiskAsync(List<int> intIds, CancellationToken cancellationToken)
     {
-        Workstation workstation = await GetWorkstation(workstationId);
-        NonPaperMedia disk = await GetDisk(diskId);
+        List<NpmId> npmIds = intIds.Select(intId => new NpmId(intId)).ToList();
+        List<NonPaperMedia> result = await _npmRepository.GetByIdsAsync(npmIds, cancellationToken);
 
-        if (await _npmRepository.IsAvailableAsync(disk.Id) == false)
-            throw new InvalidOperationException($"Диск (s/n: {disk.SerialNumber}) уже установлен в другую рабочую станцию.");
+        if (result.Count < intIds.Count)
+        {
+            HashSet<int> missingIds = intIds.ToHashSet()
+                .Except(
+                    result.Select(d => d.Id.Value)
+                    .ToHashSet())
+                .ToHashSet();
 
-        workstation.AddDisk(disk);
-        await _unitOfWork.SaveChangesAsync();
+            throw new MissingNonPaperMediaException(missingIds);
+        }
 
-        return true;
+        return result;
     }
 
-    public async Task<bool> RemoveDisk(int workstationId, int diskId)
+    private async Task AddDisks(Workstation workstation, List<NonPaperMedia> disks, CancellationToken cancellationToken)
     {
-        Workstation workstation = await GetWorkstation(workstationId);
-        NonPaperMedia disk = await GetDisk(diskId);
+        foreach (NonPaperMedia disk in disks)
+        {
+            if (await _npmRepository.IsAvailableAsync(disk.Id, cancellationToken) == false)
+                throw new InvalidOperationException($"Диск (s/n: {disk.SerialNumber}) уже установлен в другую рабочую станцию.");
+        }
 
-        if (workstation.HasDisk(disk.Id))
-            workstation.RemoveDisk(disk);
-
-        await _unitOfWork.SaveChangesAsync();
-
-        return true;
+        workstation.AddDisks(disks);
     }
 
-    private async Task<Workstation> GetWorkstation(int workstationId)
+    private async Task<Workstation> GetWorkstation(int workstationId, CancellationToken cancellationToken)
     {
         WorkstationId id = new WorkstationId(workstationId);
-        Workstation? workstation = await _repository.GetByIdAsync(id)
+        Workstation? workstation = await _repository.GetByIdAsync(id, cancellationToken)
             ?? throw new InvalidOperationException($"Рабочая станция c ID {workstationId} не найдена.");
 
         return workstation;
