@@ -72,7 +72,7 @@ public class WorkstationService
         if (taskDto.AddedDisks.Count > 0)
         {
             remarksBuilder.AppendLine("Установлено в РС: ");
-            addedDisks = await FindDiskAsync(taskDto.AddedDisks, cancellationToken);
+            addedDisks = await FindDisksAsync(taskDto.AddedDisks, cancellationToken);
 
             foreach (NonPaperMedia disk in addedDisks)
                 remarksBuilder.AppendLine(disk.ToString());
@@ -81,7 +81,7 @@ public class WorkstationService
         if (taskDto.RemovedDisks.Count > 0)
         {
             remarksBuilder.AppendLine("Изьято из РС: ");
-            removedDisks = await FindDiskAsync(taskDto.RemovedDisks, cancellationToken);
+            removedDisks = await FindDisksAsync(taskDto.RemovedDisks, cancellationToken);
 
             foreach (NonPaperMedia disk in removedDisks)
                 remarksBuilder.AppendLine(disk.ToString());
@@ -92,10 +92,11 @@ public class WorkstationService
 
         await AddDisks(workstation, addedDisks, cancellationToken);
         workstation.RemoveDisks(removedDisks);
+        _historyRepository.Insert(historyItem);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task<List<NonPaperMedia>> FindDiskAsync(List<int> intIds, CancellationToken cancellationToken)
+    private async Task<List<NonPaperMedia>> FindDisksAsync(List<int> intIds, CancellationToken cancellationToken = default)
     {
         List<NpmId> npmIds = intIds.Select(intId => new NpmId(intId)).ToList();
         List<NonPaperMedia> result = await _npmRepository.GetByIdsAsync(npmIds, cancellationToken);
