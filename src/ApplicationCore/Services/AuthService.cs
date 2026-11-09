@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Dtos.Users;
+using ApplicationCore.Exceptions;
 using ApplicationCore.Interfaces;
 using Domain.Models.Users;
 
@@ -31,10 +32,8 @@ public class AuthService
         if (string.IsNullOrWhiteSpace(loginUser.Login))
             return false;
 
-        User? user = await _repository.GetByLoginAsync(loginUser.Login.ToLower(), cancellationToken);
-
-        if (user == null)
-            return false;
+        User user = await _repository.GetByLoginAsync(loginUser.Login.ToLower(), cancellationToken)
+            ?? throw new MissingUserException();
 
         return _passwordHasher.Compare(loginUser.Password, user.PasswordHash);
     }
