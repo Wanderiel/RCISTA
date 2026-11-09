@@ -44,7 +44,7 @@ public class NonPaperMediaService
     //TODO сломано, починить
     public async Task<bool> UpdateAsync(int id, UpdatedNPMDto npmDto, CancellationToken cancellationToken = default)
     {
-        NonPaperMedia? nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
+        NonPaperMedia nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
         //UpdateNonPaperMedia(nonPaperMedia, npmDto);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -53,7 +53,7 @@ public class NonPaperMediaService
 
     public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        NonPaperMedia? nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
+        NonPaperMedia nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
         nonPaperMedia.ToBreak();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -63,7 +63,7 @@ public class NonPaperMediaService
     private async Task<NonPaperMedia> GetNonPaperMedia(int id, CancellationToken cancellationToken)
     {
         NpmId npmId = new NpmId(id);
-        NonPaperMedia? nonPaperMedia = await _npmRepository.GetByIdAsync(npmId, cancellationToken)
+        NonPaperMedia nonPaperMedia = await _npmRepository.GetByIdAsync(npmId, cancellationToken)
             ?? throw new MissingNonPaperMediaException(id);
 
         return nonPaperMedia;

@@ -121,7 +121,7 @@ public class WorkstationService
     private async Task<Workstation> GetWorkstation(int workstationId, CancellationToken cancellationToken = default)
     {
         WorkstationId id = new WorkstationId(workstationId);
-        Workstation? workstation = await _repository.GetByIdAsync(id, cancellationToken)
+        Workstation workstation = await _repository.GetByIdAsync(id, cancellationToken)
             ?? throw new MissingWorksationException(workstationId);
 
         return workstation;
