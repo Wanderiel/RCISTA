@@ -20,10 +20,7 @@ public class UserController : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> Get(int id, CancellationToken cancellationToken = default)
     {
-        User? user = await _service.GetAsync(id, cancellationToken);
-
-        if (user == null)
-            return NotFound();
+        User user = await _service.GetAsync(id, cancellationToken);
 
         return Ok(user);
     }
