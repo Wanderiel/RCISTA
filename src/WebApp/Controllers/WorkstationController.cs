@@ -27,23 +27,17 @@ public class WorkstationController : Controller
         await _service.GetAllAsync();
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<WorkstationResponse>> Get(int id)
+    public async Task<ActionResult<WorkstationResponse>> Get(int id, CancellationToken cancellationToken = default)
     {
-        WorkstationResponse? workstation = await _service.GetAsync(id);
-
-        if (workstation == null)
-            return NotFound();
+        WorkstationResponse? workstation = await _service.GetAsync(id, cancellationToken);
 
         return Ok(workstation);
     }
 
     [HttpDelete]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
     {
-        bool result = await _service.DeleteAsync(id);
-
-        if (result == false)
-            return NotFound();
+        bool result = await _service.DeleteAsync(id, cancellationToken);
 
         return Ok();
     }
