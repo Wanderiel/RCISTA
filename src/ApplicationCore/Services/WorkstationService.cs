@@ -37,56 +37,32 @@ public class WorkstationService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task<List<WorkstationResponse>> GetAllAsync() =>
-        (await _repository.GetAllAsync()).Select(w => w.ToDto()).ToList();
+    public async Task<List<WorkstationResponse>> GetAllAsync(CancellationToken cancellationToken = default) =>
+        (await _repository.GetAllAsync(cancellationToken)).Select(w => w.ToDto()).ToList();
 
-    public async Task<WorkstationResponse?> GetAsync(int id)
+    public async Task<WorkstationResponse?> GetAsync(int id, CancellationToken cancellationToken = default) =>
+        (await GetWorkstation(id, cancellationToken))?.ToDto();
+
+    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        WorkstationId workstationId = new WorkstationId(id);
-
-        return (await _repository.GetByIdAsync(workstationId))?.ToDto();
-    }
-
-    public async Task<bool> DeleteAsync(int id)
-    {
-        WorkstationId workstationId = new WorkstationId(id);
-        Workstation? workstation = await _repository.GetByIdAsync(workstationId);
-
-        if (workstation == null)
-            return false;
-
+        Workstation? workstation = await GetWorkstation(id, cancellationToken);
         workstation.WriteOff();
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return true;
     }
 
-    public async Task CreateTask(TaskRequest taskDto, CancellationToken cancellationToken)
+    public async Task CreateTask(TaskRequest taskDto, CancellationToken cancellationToken = default)
     {
         Workstation workstation = await GetWorkstation(taskDto.WorkstationId, cancellationToken);
         StringBuilder remarksBuilder = new StringBuilder(taskDto.Remarks);
-        List<NonPaperMedia> addedDisks = [];
-        List<NonPaperMedia> removedDisks = [];
+        List<NonPaperMedia> addedDisks = await FindDisksAsync(taskDto.AddedDiskIds, cancellationToken);
+        List<NonPaperMedia> removedDisks = await FindDisksAsync(taskDto.RemovedDiskIds, cancellationToken);
+
         User user = new User("test", FullName.Create("test", "test", "test"), "12345678"); //TODO заглушка
 
-        if (taskDto.AddedDisks.Count > 0)
-        {
-            remarksBuilder.AppendLine("Установлено в РС: ");
-            addedDisks = await FindDisksAsync(taskDto.AddedDisks, cancellationToken);
-
-            foreach (NonPaperMedia disk in addedDisks)
-                remarksBuilder.AppendLine(disk.ToString());
-        }
-
-        if (taskDto.RemovedDisks.Count > 0)
-        {
-            remarksBuilder.AppendLine("Изьято из РС: ");
-            removedDisks = await FindDisksAsync(taskDto.RemovedDisks, cancellationToken);
-
-            foreach (NonPaperMedia disk in removedDisks)
-                remarksBuilder.AppendLine(disk.ToString());
-        }
-
+        AddDiskInfoToRemarks("Установлено в РС: ", remarksBuilder, addedDisks);
+        AddDiskInfoToRemarks("Изьято из РС: ", remarksBuilder, removedDisks);
         WorkstationHistoryItem historyItem = new WorkstationHistoryItem(
             workstation, taskDto.ActionDate, taskDto.Description, taskDto.Number, user, remarksBuilder.ToString());
 
@@ -98,8 +74,13 @@ public class WorkstationService
 
     private async Task<List<NonPaperMedia>> FindDisksAsync(List<int> intIds, CancellationToken cancellationToken = default)
     {
+        List<NonPaperMedia> result = [];
+
+        if (intIds.Count == 0)
+            return result;
+
         List<NpmId> npmIds = intIds.Select(intId => new NpmId(intId)).ToList();
-        List<NonPaperMedia> result = await _npmRepository.GetByIdsAsync(npmIds, cancellationToken);
+        result = await _npmRepository.GetByIdsAsync(npmIds, cancellationToken);
 
         if (result.Count < intIds.Count)
         {
@@ -115,7 +96,18 @@ public class WorkstationService
         return result;
     }
 
-    private async Task AddDisks(Workstation workstation, List<NonPaperMedia> disks, CancellationToken cancellationToken)
+    private void AddDiskInfoToRemarks(string comment, StringBuilder remarksBuilder, List<NonPaperMedia> disks)
+    {
+        if (disks.Count > 0)
+        {
+            remarksBuilder.AppendLine(comment);
+
+            foreach (NonPaperMedia disk in disks)
+                remarksBuilder.AppendLine(disk.ToString());
+        }
+    }
+
+    private async Task AddDisks(Workstation workstation, List<NonPaperMedia> disks, CancellationToken cancellationToken = default)
     {
         foreach (NonPaperMedia disk in disks)
         {
@@ -126,21 +118,12 @@ public class WorkstationService
         workstation.AddDisks(disks);
     }
 
-    private async Task<Workstation> GetWorkstation(int workstationId, CancellationToken cancellationToken)
+    private async Task<Workstation> GetWorkstation(int workstationId, CancellationToken cancellationToken = default)
     {
         WorkstationId id = new WorkstationId(workstationId);
         Workstation? workstation = await _repository.GetByIdAsync(id, cancellationToken)
             ?? throw new InvalidOperationException($"Рабочая станция c ID {workstationId} не найдена.");
 
         return workstation;
-    }
-
-    private async Task<NonPaperMedia> GetDisk(int diskId)
-    {
-        NpmId npmId = new NpmId(diskId);
-        NonPaperMedia? disk = await _npmRepository.GetByIdAsync(npmId)
-            ?? throw new InvalidOperationException($"Диск с ID {diskId} не найден.");
-
-        return disk;
     }
 }
