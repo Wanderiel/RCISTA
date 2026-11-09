@@ -30,11 +30,11 @@ public class WorkstationService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Create(CreatedWorkstationDto workstationDto)
+    public async Task Create(CreatedWorkstationDto workstationDto, CancellationToken cancellationToken = default)
     {
         Workstation workstation = new Workstation(workstationDto.InventoryNumber.ToUpper());
         _repository.Insert(workstation);
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<List<WorkstationResponse>> GetAllAsync(CancellationToken cancellationToken = default) =>

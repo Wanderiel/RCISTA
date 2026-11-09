@@ -15,16 +15,16 @@ public class WorkstationController : Controller
         _service = service;
 
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] CreatedWorkstationDto dto)
+    public async Task<ActionResult> Create([FromBody] CreatedWorkstationDto dto, CancellationToken cancellationToken = default)
     {
-        await _service.Create(dto);
+        await _service.Create(dto, cancellationToken);
 
         return Created();
     }
 
     [HttpGet]
-    public async Task<List<WorkstationResponse>> GetAll() =>
-        await _service.GetAllAsync();
+    public async Task<List<WorkstationResponse>> GetAll(CancellationToken cancellationToken = default) =>
+        await _service.GetAllAsync(cancellationToken);
 
     [HttpGet("{id}")]
     public async Task<ActionResult<WorkstationResponse>> Get(int id, CancellationToken cancellationToken = default)
