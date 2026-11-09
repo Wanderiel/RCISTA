@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Dtos.NPMs;
+using ApplicationCore.Exceptions;
 using ApplicationCore.Extentions;
 using ApplicationCore.Interfaces;
 using Domain.Models.Base;
@@ -37,22 +38,13 @@ public class NonPaperMediaService
     public async Task<List<NpmResponse>> GetAllAsync(CancellationToken cancellationToken = default) =>
         (await _npmRepository.GetAllAsync(cancellationToken)).Select(npm => npm.ToDto()).ToList();
 
-    public async Task<NpmResponse?> GetAsync(int id, CancellationToken cancellationToken = default)
-    {
-        NpmId npmId = new NpmId(id);
-
-        return (await _npmRepository.GetByIdAsync(npmId, cancellationToken))?.ToDto();
-    }
+    public async Task<NpmResponse?> GetAsync(int id, CancellationToken cancellationToken = default) =>
+        (await GetNonPaperMedia(id, cancellationToken))?.ToDto();
 
     //TODO сломано, починить
     public async Task<bool> UpdateAsync(int id, UpdatedNPMDto npmDto, CancellationToken cancellationToken = default)
     {
-        NpmId npmId = new NpmId(id);
-        NonPaperMedia? nonPaperMedia = await _npmRepository.GetByIdAsync(npmId, cancellationToken);
-
-        if (nonPaperMedia == null)
-            return false;
-
+        NonPaperMedia? nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
         //UpdateNonPaperMedia(nonPaperMedia, npmDto);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -61,15 +53,19 @@ public class NonPaperMediaService
 
     public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        NpmId npmId = new NpmId(id);
-        NonPaperMedia? nonPaperMedia = await _npmRepository.GetByIdAsync(npmId, cancellationToken);
-
-        if (nonPaperMedia == null)
-            return false;
-
+        NonPaperMedia? nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
         nonPaperMedia.ToBreak();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return true;
+    }
+
+    private async Task<NonPaperMedia> GetNonPaperMedia(int id, CancellationToken cancellationToken)
+    {
+        NpmId npmId = new NpmId(id);
+        NonPaperMedia? nonPaperMedia = await _npmRepository.GetByIdAsync(npmId, cancellationToken)
+            ?? throw new MissingNonPaperMediaException(id);
+
+        return nonPaperMedia;
     }
 }

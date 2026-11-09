@@ -30,9 +30,6 @@ public class NonPaperMediaController : Controller
     {
         NpmResponse? nonPaperMedia = await _service.GetAsync(id, cancellationToken);
 
-        if (nonPaperMedia == null)
-            return NotFound();
-
         return Ok(nonPaperMedia);
     }
 
@@ -40,9 +37,6 @@ public class NonPaperMediaController : Controller
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
     {
         bool result = await _service.DeleteAsync(id, cancellationToken);
-
-        if (result == false)
-            return NotFound();
 
         return Ok();
     }
