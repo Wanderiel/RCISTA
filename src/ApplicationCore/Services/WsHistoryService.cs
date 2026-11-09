@@ -7,16 +7,11 @@ namespace ApplicationCore.Services;
 public class WsHistoryService
 {
     private readonly IWsHistoryRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public WsHistoryService(IWsHistoryRepository wsHistoryRepository, IUnitOfWork unitOfWork)
-    {
+    public WsHistoryService(IWsHistoryRepository wsHistoryRepository) =>
         _repository = wsHistoryRepository;
-        _unitOfWork = unitOfWork;
-    }
 
-    public async Task<List<WsHistoryResponse>> GetAllAsync()
+    public async Task<List<WsHistoryResponse>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return (await _repository.GetAllAsync()).Select(r => r.ToDto()).ToList();
+        return (await _repository.GetAllAsync(cancellationToken)).Select(r => r.ToDto()).ToList();
     }
 }

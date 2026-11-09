@@ -16,5 +16,5 @@ public class WsHistoryRepository : IWsHistoryRepository
         _context.WorkstationHistoryItems.Add(item);
 
     public async Task<List<WorkstationHistoryItem>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        await _context.WorkstationHistoryItems.ToListAsync(cancellationToken: cancellationToken);
+        await _context.WorkstationHistoryItems.ToListAsync(cancellationToken);
 }
