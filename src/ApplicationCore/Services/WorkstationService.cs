@@ -112,7 +112,7 @@ public class WorkstationService
         foreach (NonPaperMedia disk in disks)
         {
             if (await _npmRepository.IsAvailableAsync(disk.Id, cancellationToken) == false)
-                throw new InvalidOperationException($"Диск (s/n: {disk.SerialNumber}) уже установлен в другую рабочую станцию.");
+                throw new NonPaperMediaAlreadyAssignedException(disk.SerialNumber);
         }
 
         workstation.AddDisks(disks);
