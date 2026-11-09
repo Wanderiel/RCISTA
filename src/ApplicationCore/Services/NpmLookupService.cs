@@ -10,5 +10,5 @@ public class NpmLookupService : INpmLookup
         _repository = repository;
 
     public async Task<bool> HasNpmBySerialnumberAsync(string serialnumber, CancellationToken cancellationToken = default) =>
-        await _repository.HasNpmBySerialNumberAsync(serialnumber, cancellationToken);
+        await _repository.HasNpmBySerialnumberAsync(serialnumber, cancellationToken);
 }

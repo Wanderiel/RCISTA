@@ -44,6 +44,6 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
         await _context.NonPaperMedias.AnyAsync(
             disk => disk.Id == id && EF.Property<WorkstationId?>(disk, "WorkstationId") == null, cancellationToken);
 
-    public Task<bool> HasNpmBySerialNumberAsync(string serialnumber, CancellationToken cancellationToken) =>
+    public Task<bool> HasNpmBySerialnumberAsync(string serialnumber, CancellationToken cancellationToken) =>
         _context.NonPaperMedias.AnyAsync(d => d.SerialNumber == serialnumber, cancellationToken);
 }
