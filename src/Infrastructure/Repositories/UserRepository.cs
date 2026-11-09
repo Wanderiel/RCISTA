@@ -15,14 +15,14 @@ public class UserRepository : IUserRepository
     public void Insert(User user) =>
         _context.Users.Add(user);
 
-    public async Task<List<User>> GetAllAsync() =>
-        await _context.Users.ToListAsync();
+    public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken = default) =>
+        await _context.Users.ToListAsync(cancellationToken);
 
-    public async Task<User?> GetByIdAsync(UserId id) =>
-        await _context.Users.FindAsync(id);
+    public async Task<User?> GetByIdAsync(UserId id, CancellationToken cancellationToken = default) =>
+        await _context.Users.FindAsync(id, cancellationToken);
 
-    public async Task<User?> GetByLoginAsync(string login) =>
-        await _context.Users.FirstOrDefaultAsync(u => u.Login == login);
+    public async Task<User?> GetByLoginAsync(string login, CancellationToken cancellationToken = default) =>
+        await _context.Users.FirstOrDefaultAsync(u => u.Login == login, cancellationToken);
 
     public async Task<bool> HasUserByLoginAsync(string login, CancellationToken cancellationToken = default) =>
         await _context.Users.AnyAsync(u => u.Login == login, cancellationToken);
