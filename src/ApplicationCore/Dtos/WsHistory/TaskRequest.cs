@@ -6,8 +6,8 @@ public class TaskRequest
     public string Description { get; set; } = string.Empty;
     public DateOnly? ActionDate { get; set; }
     public required int WorkstationId { get; set; }
-    public required List<int> AddedDisks { get; set; } = [];
-    public required List<int> RemovedDisks { get; set; } = [];
+    public required List<int> AddedDiskIds { get; set; } = [];
+    public required List<int> RemovedDiskIds { get; set; } = [];
     public string? Remarks { get; set; } = string.Empty;
 
 }
