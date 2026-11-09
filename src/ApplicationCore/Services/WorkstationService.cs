@@ -122,7 +122,7 @@ public class WorkstationService
     {
         WorkstationId id = new WorkstationId(workstationId);
         Workstation? workstation = await _repository.GetByIdAsync(id, cancellationToken)
-            ?? throw new InvalidOperationException($"Рабочая станция c ID {workstationId} не найдена.");
+            ?? throw new MissingWorksationException(workstationId);
 
         return workstation;
     }
