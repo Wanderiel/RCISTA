@@ -1,5 +1,5 @@
 ﻿using ApplicationCore.Dtos.NPMs;
-using ApplicationCore.Services;
+using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
@@ -8,9 +8,9 @@ namespace WebApp.Controllers;
 [Route("[controller]")]
 public class NonPaperMediaController : Controller
 {
-    private readonly NonPaperMediaService _service;
+    private readonly INonPaperMediaService _service;
 
-    public NonPaperMediaController(NonPaperMediaService npmService) =>
+    public NonPaperMediaController(INonPaperMediaService npmService) =>
         _service = npmService;
 
     [HttpPost]

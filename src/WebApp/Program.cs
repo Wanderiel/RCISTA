@@ -35,6 +35,7 @@ builder.Services.AddScoped<WsHistoryService>();
 builder.Services.AddScoped<INonPaperMediaRepository, NonPaperMediaRepository>();
 builder.Services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
 builder.Services.AddScoped<IModelRepository, ModelRepository>();
+builder.Services.AddScoped<INonPaperMediaService, NonPaperMediaService>();
 builder.Services.AddScoped<NonPaperMediaService>();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 
