@@ -15,13 +15,13 @@ public class UserService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        await _repository.GetAllAsync(cancellationToken);
+    public async Task<List<User>> GetAll(CancellationToken cancellationToken = default) =>
+        await _repository.GetAll(cancellationToken);
 
-    public async Task<User> GetAsync(int id, CancellationToken cancellationToken = default) =>
+    public async Task<User> Get(int id, CancellationToken cancellationToken = default) =>
         await GetUser(id, cancellationToken);
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<bool> Delete(int id, CancellationToken cancellationToken = default)
     {
         User user = await GetUser(id, cancellationToken);
         user.Block();
@@ -33,7 +33,7 @@ public class UserService
     private async Task<User> GetUser(int id, CancellationToken cancellationToken)
     {
         UserId userId = new UserId(id);
-        User user = await _repository.GetByIdAsync(userId, cancellationToken) ??
+        User user = await _repository.GetById(userId, cancellationToken) ??
             throw new MissingUserException(id);
 
         return user;

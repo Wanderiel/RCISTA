@@ -4,7 +4,7 @@ namespace ApplicationCore.Interfaces;
 
 public interface IModelRepository
 {
-    Task<Model> GetOrCreateByNameAsync(string name, CancellationToken cancellationToken = default);
-    Task<Model?> FindByIdAsync(ModelId id, CancellationToken cancellationToken = default);
-    Task<Model?> FindByNameAsync(string name, CancellationToken cancellationToken = default);
+    Task<Model> GetOrCreateByName(string name, CancellationToken cancellationToken = default);
+    Task<Model?> FindById(ModelId id, CancellationToken cancellationToken = default);
+    Task<Model?> FindByName(string name, CancellationToken cancellationToken = default);
 }

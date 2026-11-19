@@ -7,7 +7,7 @@ using Domain.Models.NPMs;
 
 namespace ApplicationCore.Services;
 
-public class NonPaperMediaService
+public class NonPaperMediaService : INonPaperMediaService
 {
     private readonly INonPaperMediaRepository _npmRepository;
     private readonly IManufacturerRepository _manufacturerRepository;
@@ -28,21 +28,21 @@ public class NonPaperMediaService
 
     public async Task Create(NpmRequest dto, CancellationToken cancellationToken = default)
     {
-        Manufacturer manufacturer = await _manufacturerRepository.GetOrCreateByNameAsync(dto.Manufacturer, cancellationToken);
-        Model model = await _modelRepository.GetOrCreateByNameAsync(dto.Model, cancellationToken);
+        Manufacturer manufacturer = await _manufacturerRepository.GetOrCreateByName(dto.Manufacturer, cancellationToken);
+        Model model = await _modelRepository.GetOrCreateByName(dto.Model, cancellationToken);
         NonPaperMedia nonPaperMedia = new NonPaperMedia(dto.Type, manufacturer, model, dto.SerialNumber, dto.Capacity);
         _npmRepository.Insert(nonPaperMedia);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<NpmResponse>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        (await _npmRepository.GetAllAsync(cancellationToken)).Select(npm => npm.ToDto()).ToList();
+    public async Task<List<NpmResponse>> GetAll(CancellationToken cancellationToken = default) =>
+        (await _npmRepository.GetAll(cancellationToken)).Select(npm => npm.ToDto()).ToList();
 
-    public async Task<NpmResponse?> GetAsync(int id, CancellationToken cancellationToken = default) =>
+    public async Task<NpmResponse?> Get(int id, CancellationToken cancellationToken = default) =>
         (await GetNonPaperMedia(id, cancellationToken))?.ToDto();
 
     //TODO сломано, починить
-    public async Task<bool> UpdateAsync(int id, UpdatedNPMDto npmDto, CancellationToken cancellationToken = default)
+    public async Task<bool> Update(int id, UpdatedNPMDto npmDto, CancellationToken cancellationToken = default)
     {
         NonPaperMedia nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
         //UpdateNonPaperMedia(nonPaperMedia, npmDto);
@@ -51,7 +51,7 @@ public class NonPaperMediaService
         return true;
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<bool> Delete(int id, CancellationToken cancellationToken = default)
     {
         NonPaperMedia nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
         nonPaperMedia.ToBreak();
@@ -60,10 +60,37 @@ public class NonPaperMediaService
         return true;
     }
 
+    public async Task<bool> IsAvailable(NpmId id, CancellationToken cancellationToken = default) =>
+        await _npmRepository.IsAvailable(id, cancellationToken);
+
+    public async Task<List<NonPaperMedia>> FindDisks(List<int> intIds, CancellationToken cancellationToken = default)
+    {
+        List<NonPaperMedia> result = [];
+
+        if (intIds.Count == 0)
+            return result;
+
+        List<NpmId> npmIds = intIds.Select(intId => new NpmId(intId)).ToList();
+        result = await _npmRepository.GetByIds(npmIds, cancellationToken);
+
+        if (result.Count < intIds.Count)
+        {
+            HashSet<int> missingIds = intIds.ToHashSet()
+                .Except(
+                    result.Select(d => d.Id.Value)
+                    .ToHashSet())
+                .ToHashSet();
+
+            throw new MissingNonPaperMediaException(missingIds);
+        }
+
+        return result;
+    }
+
     private async Task<NonPaperMedia> GetNonPaperMedia(int id, CancellationToken cancellationToken)
     {
         NpmId npmId = new NpmId(id);
-        NonPaperMedia nonPaperMedia = await _npmRepository.GetByIdAsync(npmId, cancellationToken)
+        NonPaperMedia nonPaperMedia = await _npmRepository.GetById(npmId, cancellationToken)
             ?? throw new MissingNonPaperMediaException(id);
 
         return nonPaperMedia;

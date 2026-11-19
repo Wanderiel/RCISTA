@@ -4,7 +4,7 @@ namespace ApplicationCore.Interfaces;
 
 public interface IManufacturerRepository
 {
-    Task<Manufacturer> GetOrCreateByNameAsync(string name, CancellationToken cancellationToken = default);
-    Task<Manufacturer?> FindByIdAsync(ManufacturerId id, CancellationToken cancellationToken = default);
-    Task<Manufacturer?> FindByNameAsync(string name, CancellationToken cancellationToken = default);
+    Task<Manufacturer> GetOrCreateByName(string name, CancellationToken cancellationToken = default);
+    Task<Manufacturer?> FindById(ManufacturerId id, CancellationToken cancellationToken = default);
+    Task<Manufacturer?> FindByName(string name, CancellationToken cancellationToken = default);
 }

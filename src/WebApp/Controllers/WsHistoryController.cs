@@ -15,5 +15,5 @@ public class WsHistoryController : Controller
 
     [HttpGet]
     public async Task<List<WsHistoryResponse>> GetAll(CancellationToken cancellationToken = default) =>
-        await _service.GetAllAsync(cancellationToken);
+        await _service.GetAll(cancellationToken);
 }

@@ -15,18 +15,18 @@ public class WorkstationService
 {
     private readonly IWorkstationRepository _repository;
     private readonly IWsHistoryRepository _historyRepository;
-    private readonly INonPaperMediaRepository _npmRepository;
+    private readonly NonPaperMediaService _diskService;
     private readonly IUnitOfWork _unitOfWork;
 
     public WorkstationService(
         IWorkstationRepository repository,
         IWsHistoryRepository historyRepository,
-        INonPaperMediaRepository npmRepository,
+        NonPaperMediaService diskService,
         IUnitOfWork unitOfWork)
     {
         _repository = repository;
         _historyRepository = historyRepository;
-        _npmRepository = npmRepository;
+        _diskService = diskService;
         _unitOfWork = unitOfWork;
     }
 
@@ -37,13 +37,13 @@ public class WorkstationService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<WorkstationResponse>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        (await _repository.GetAllAsync(cancellationToken)).Select(w => w.ToDto()).ToList();
+    public async Task<List<WorkstationResponse>> GetAll(CancellationToken cancellationToken = default) =>
+        (await _repository.GetAll(cancellationToken)).Select(w => w.ToDto()).ToList();
 
-    public async Task<WorkstationResponse?> GetAsync(int id, CancellationToken cancellationToken = default) =>
+    public async Task<WorkstationResponse?> Get(int id, CancellationToken cancellationToken = default) =>
         (await GetWorkstation(id, cancellationToken))?.ToDto();
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<bool> Delete(int id, CancellationToken cancellationToken = default)
     {
         Workstation? workstation = await GetWorkstation(id, cancellationToken);
         workstation.WriteOff();
@@ -56,8 +56,8 @@ public class WorkstationService
     {
         Workstation workstation = await GetWorkstation(taskDto.WorkstationId, cancellationToken);
         StringBuilder remarksBuilder = new StringBuilder(taskDto.Remarks);
-        List<NonPaperMedia> addedDisks = await FindDisksAsync(taskDto.AddedDiskIds, cancellationToken);
-        List<NonPaperMedia> removedDisks = await FindDisksAsync(taskDto.RemovedDiskIds, cancellationToken);
+        List<NonPaperMedia> addedDisks = await _diskService.FindDisks(taskDto.AddedDiskIds, cancellationToken);
+        List<NonPaperMedia> removedDisks = await _diskService.FindDisks(taskDto.RemovedDiskIds, cancellationToken);
 
         User user = new User("test", FullName.Create("test", "test", "test"), "12345678"); //TODO заглушка
 
@@ -70,30 +70,6 @@ public class WorkstationService
         workstation.RemoveDisks(removedDisks);
         _historyRepository.Insert(historyItem);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task<List<NonPaperMedia>> FindDisksAsync(List<int> intIds, CancellationToken cancellationToken = default)
-    {
-        List<NonPaperMedia> result = [];
-
-        if (intIds.Count == 0)
-            return result;
-
-        List<NpmId> npmIds = intIds.Select(intId => new NpmId(intId)).ToList();
-        result = await _npmRepository.GetByIdsAsync(npmIds, cancellationToken);
-
-        if (result.Count < intIds.Count)
-        {
-            HashSet<int> missingIds = intIds.ToHashSet()
-                .Except(
-                    result.Select(d => d.Id.Value)
-                    .ToHashSet())
-                .ToHashSet();
-
-            throw new MissingNonPaperMediaException(missingIds);
-        }
-
-        return result;
     }
 
     private void AddDiskInfoToRemarks(string comment, StringBuilder remarksBuilder, List<NonPaperMedia> disks)
@@ -111,7 +87,7 @@ public class WorkstationService
     {
         foreach (NonPaperMedia disk in disks)
         {
-            if (await _npmRepository.IsAvailableAsync(disk.Id, cancellationToken) == false)
+            if (await _diskService.IsAvailable(disk.Id, cancellationToken) == false)
                 throw new NonPaperMediaAlreadyAssignedException(disk.SerialNumber);
         }
 
@@ -121,7 +97,7 @@ public class WorkstationService
     private async Task<Workstation> GetWorkstation(int workstationId, CancellationToken cancellationToken = default)
     {
         WorkstationId id = new WorkstationId(workstationId);
-        Workstation workstation = await _repository.GetByIdAsync(id, cancellationToken)
+        Workstation workstation = await _repository.GetById(id, cancellationToken)
             ?? throw new MissingWorksationException(workstationId);
 
         return workstation;

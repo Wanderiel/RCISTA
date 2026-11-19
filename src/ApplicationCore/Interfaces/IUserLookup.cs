@@ -2,5 +2,5 @@
 
 public interface IUserLookup
 {
-    Task<bool> HasUserByLoginAsync(string username, CancellationToken cancellationToken = default);
+    Task<bool> HasUserByLogin(string username, CancellationToken cancellationToken = default);
 }

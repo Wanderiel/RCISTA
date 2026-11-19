@@ -15,7 +15,7 @@ public class WorkstationRepository : IWorkstationRepository
     public void Insert(Workstation workstation) =>
         _context.Workstations.Add(workstation);
 
-    public async Task<List<Workstation>> GetAllAsync(CancellationToken cancellationToken = default) =>
+    public async Task<List<Workstation>> GetAll(CancellationToken cancellationToken = default) =>
         await _context.Workstations
             .Include(w => w.Disks)
                 .ThenInclude(d => d.Manufacturer)
@@ -23,7 +23,7 @@ public class WorkstationRepository : IWorkstationRepository
                 .ThenInclude(d => d.Model)
             .ToListAsync(cancellationToken);
 
-    public async Task<Workstation?> GetByIdAsync(WorkstationId workstationId, CancellationToken cancellationToken = default) =>
+    public async Task<Workstation?> GetById(WorkstationId workstationId, CancellationToken cancellationToken = default) =>
         await _context.Workstations
             .Include(w => w.Disks)
                 .ThenInclude(d => d.Manufacturer)

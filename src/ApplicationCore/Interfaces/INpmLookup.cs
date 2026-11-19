@@ -2,5 +2,5 @@
 
 public interface INpmLookup
 {
-    Task<bool> HasNpmBySerialnumberAsync(string serialnumber, CancellationToken cancellationToken = default);
+    Task<bool> HasNpmBySerialnumber(string serialnumber, CancellationToken cancellationToken = default);
 }

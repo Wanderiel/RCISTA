@@ -12,9 +12,9 @@ public class ModelRepository : IModelRepository
     public ModelRepository(PostgresContext context) =>
         _context = context;
 
-    public async Task<Model> GetOrCreateByNameAsync(string name, CancellationToken cancellationToken = default)
+    public async Task<Model> GetOrCreateByName(string name, CancellationToken cancellationToken = default)
     {
-        Model? model = await FindByNameAsync(name, cancellationToken);
+        Model? model = await FindByName(name, cancellationToken);
 
         if (model == null)
         {
@@ -25,9 +25,9 @@ public class ModelRepository : IModelRepository
         return model;
     }
 
-    public async Task<Model?> FindByIdAsync(ModelId id, CancellationToken cancellationToken = default) =>
+    public async Task<Model?> FindById(ModelId id, CancellationToken cancellationToken = default) =>
         await _context.Models.FindAsync(id, cancellationToken);
 
-    public async Task<Model?> FindByNameAsync(string name, CancellationToken cancellationToken = default) =>
+    public async Task<Model?> FindByName(string name, CancellationToken cancellationToken = default) =>
         await _context.Models.FirstOrDefaultAsync(m => m.Name.ToLower() == name.ToLower(), cancellationToken);
 }

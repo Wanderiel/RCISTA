@@ -38,5 +38,5 @@ public class RegisterValidator : AbstractValidator<RegisteredUserDto>
     }
 
     private async Task<bool> IsLoginAvailable(string username, CancellationToken cancellationToken = default) =>
-        await _userLookup.HasUserByLoginAsync(username, cancellationToken) == false;
+        await _userLookup.HasUserByLogin(username, cancellationToken) == false;
 }

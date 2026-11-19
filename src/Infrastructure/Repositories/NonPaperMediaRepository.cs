@@ -16,19 +16,19 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
     public void Insert(NonPaperMedia nonPaperMedia) =>
         _context.NonPaperMedias.Add(nonPaperMedia);
 
-    public async Task<List<NonPaperMedia>> GetAllAsync(CancellationToken cancellationToken = default) =>
+    public async Task<List<NonPaperMedia>> GetAll(CancellationToken cancellationToken = default) =>
         await _context.NonPaperMedias
             .Include(npm => npm.Manufacturer)
             .Include(npm => npm.Model)
             .ToListAsync(cancellationToken);
 
-    public async Task<NonPaperMedia?> GetByIdAsync(NpmId id, CancellationToken cancellationToken = default) =>
+    public async Task<NonPaperMedia?> GetById(NpmId id, CancellationToken cancellationToken = default) =>
         await _context.NonPaperMedias
             .Include(npm => npm.Manufacturer)
             .Include(d => d.Model)
             .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
-    public async Task<List<NonPaperMedia>> GetByIdsAsync(IEnumerable<NpmId> ids, CancellationToken cancellationToken = default)
+    public async Task<List<NonPaperMedia>> GetByIds(IEnumerable<NpmId> ids, CancellationToken cancellationToken = default)
     {
         if (ids.Any() == false)
             return new List<NonPaperMedia>();
@@ -40,10 +40,10 @@ public class NonPaperMediaRepository : INonPaperMediaRepository
         return result;
     }
 
-    public async Task<bool> IsAvailableAsync(NpmId id, CancellationToken cancellationToken = default) =>
+    public async Task<bool> IsAvailable(NpmId id, CancellationToken cancellationToken = default) =>
         await _context.NonPaperMedias.AnyAsync(
             disk => disk.Id == id && EF.Property<WorkstationId?>(disk, "WorkstationId") == null, cancellationToken);
 
-    public Task<bool> HasNpmBySerialnumberAsync(string serialnumber, CancellationToken cancellationToken) =>
+    public Task<bool> HasNpmBySerialnumber(string serialnumber, CancellationToken cancellationToken) =>
         _context.NonPaperMedias.AnyAsync(d => d.SerialNumber == serialnumber, cancellationToken);
 }

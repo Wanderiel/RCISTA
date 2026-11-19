@@ -31,5 +31,5 @@ public class NpmValidator : AbstractValidator<NpmRequest>
     }
 
     private async Task<bool> IsSerialnumberAvailable(string serialnumber, CancellationToken cancellationToken = default) =>
-        await _lookup.HasNpmBySerialnumberAsync(serialnumber, cancellationToken);
+        await _lookup.HasNpmBySerialnumber(serialnumber, cancellationToken);
 }

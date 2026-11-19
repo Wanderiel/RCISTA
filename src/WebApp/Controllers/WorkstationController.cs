@@ -24,12 +24,12 @@ public class WorkstationController : Controller
 
     [HttpGet]
     public async Task<List<WorkstationResponse>> GetAll(CancellationToken cancellationToken = default) =>
-        await _service.GetAllAsync(cancellationToken);
+        await _service.GetAll(cancellationToken);
 
     [HttpGet("{id}")]
     public async Task<ActionResult<WorkstationResponse>> Get(int id, CancellationToken cancellationToken = default)
     {
-        WorkstationResponse? workstation = await _service.GetAsync(id, cancellationToken);
+        WorkstationResponse? workstation = await _service.Get(id, cancellationToken);
 
         return Ok(workstation);
     }
@@ -37,7 +37,7 @@ public class WorkstationController : Controller
     [HttpDelete]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
     {
-        bool result = await _service.DeleteAsync(id, cancellationToken);
+        bool result = await _service.Delete(id, cancellationToken);
 
         return Ok();
     }

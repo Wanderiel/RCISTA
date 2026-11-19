@@ -15,12 +15,12 @@ public class UserController : Controller
 
     [HttpGet]
     public async Task<List<User>> GetAll(CancellationToken cancellationToken = default) =>
-        await _service.GetAllAsync(cancellationToken);
+        await _service.GetAll(cancellationToken);
 
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> Get(int id, CancellationToken cancellationToken = default)
     {
-        User user = await _service.GetAsync(id, cancellationToken);
+        User user = await _service.Get(id, cancellationToken);
 
         return Ok(user);
     }
@@ -28,7 +28,7 @@ public class UserController : Controller
     [HttpDelete]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
     {
-        bool result = await _service.DeleteAsync(id, cancellationToken);
+        bool result = await _service.Delete(id, cancellationToken);
 
         if (result == false)
             return NotFound();

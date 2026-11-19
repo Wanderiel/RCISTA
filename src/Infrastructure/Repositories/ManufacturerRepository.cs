@@ -12,9 +12,9 @@ public class ManufacturerRepository : IManufacturerRepository
     public ManufacturerRepository(PostgresContext context) =>
         _context = context;
 
-    public async Task<Manufacturer> GetOrCreateByNameAsync(string name, CancellationToken cancellationToken = default)
+    public async Task<Manufacturer> GetOrCreateByName(string name, CancellationToken cancellationToken = default)
     {
-        Manufacturer? manufacturer = await FindByNameAsync(name, cancellationToken);
+        Manufacturer? manufacturer = await FindByName(name, cancellationToken);
 
         if (manufacturer == null)
         {
@@ -25,9 +25,9 @@ public class ManufacturerRepository : IManufacturerRepository
         return manufacturer;
     }
 
-    public async Task<Manufacturer?> FindByIdAsync(ManufacturerId id, CancellationToken cancellationToken = default) =>
+    public async Task<Manufacturer?> FindById(ManufacturerId id, CancellationToken cancellationToken = default) =>
         await _context.Manufacturers.FindAsync(id, cancellationToken);
 
-    public async Task<Manufacturer?> FindByNameAsync(string name, CancellationToken cancellationToken = default) =>
+    public async Task<Manufacturer?> FindByName(string name, CancellationToken cancellationToken = default) =>
         await _context.Manufacturers.FirstOrDefaultAsync(m => m.Name.ToLower() == name.ToLower(), cancellationToken);
 }

@@ -9,6 +9,6 @@ public class NpmLookupService : INpmLookup
     public NpmLookupService(INonPaperMediaRepository repository) =>
         _repository = repository;
 
-    public async Task<bool> HasNpmBySerialnumberAsync(string serialnumber, CancellationToken cancellationToken = default) =>
-        await _repository.HasNpmBySerialnumberAsync(serialnumber, cancellationToken);
+    public async Task<bool> HasNpmBySerialnumber(string serialnumber, CancellationToken cancellationToken = default) =>
+        await _repository.HasNpmBySerialnumber(serialnumber, cancellationToken);
 }
