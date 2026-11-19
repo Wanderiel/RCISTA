@@ -2,8 +2,8 @@
 
 public class MissingUserException : Exception
 {
-    public MissingUserException()
-        : base("Пользователь с таким логином не найден.")
+    public MissingUserException(string login)
+        : base($"Пользователь с логином {login} не найден.")
     { }
 
     public MissingUserException(int id)

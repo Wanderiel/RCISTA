@@ -33,7 +33,7 @@ public class AuthService
             return false;
 
         User user = await _repository.GetByLogin(loginUser.Login.ToLower(), cancellationToken)
-            ?? throw new MissingUserException();
+            ?? throw new MissingUserException(loginUser.Login.ToLower());
 
         return _passwordHasher.Compare(loginUser.Password, user.PasswordHash);
     }
