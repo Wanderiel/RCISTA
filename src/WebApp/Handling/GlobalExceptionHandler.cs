@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Handling;
 
-public class ClobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler : IExceptionHandler
 {
-    private readonly ILogger<ClobalExceptionHandler> _logger;
+    private readonly ILogger<GlobalExceptionHandler> _logger;
 
-    public ClobalExceptionHandler(ILogger<ClobalExceptionHandler> logger) =>
+    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) =>
         _logger = logger;
 
     public async ValueTask<bool> TryHandleAsync(
