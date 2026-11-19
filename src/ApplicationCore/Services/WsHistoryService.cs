@@ -10,8 +10,6 @@ public class WsHistoryService
     public WsHistoryService(IWsHistoryRepository wsHistoryRepository) =>
         _repository = wsHistoryRepository;
 
-    public async Task<List<WsHistoryResponse>> GetAll(CancellationToken cancellationToken = default)
-    {
-        return (await _repository.GetAll(cancellationToken)).Select(r => r.ToDto()).ToList();
-    }
+    public async Task<List<WsHistoryResponse>> GetAll(CancellationToken cancellationToken = default) =>
+        (await _repository.GetAll(cancellationToken)).Select(r => r.ToDto()).ToList();
 }

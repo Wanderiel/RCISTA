@@ -36,7 +36,7 @@ public class NonPaperMediaController : Controller
     [HttpDelete]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
     {
-        bool result = await _service.Delete(id, cancellationToken);
+        await _service.Delete(id, cancellationToken);
 
         return Ok();
     }
@@ -44,10 +44,7 @@ public class NonPaperMediaController : Controller
     [HttpPut]
     public async Task<IActionResult> Update(int id, [FromBody] UpdatedNPMDto npmDto, CancellationToken cancellationToken = default)
     {
-        bool result = await _service.Update(id, npmDto, cancellationToken);
-
-        if (result == false)
-            return BadRequest();
+        await _service.Update(id, npmDto, cancellationToken);
 
         return Ok();
     }

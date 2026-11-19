@@ -37,7 +37,7 @@ public class WorkstationController : Controller
     [HttpDelete]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
     {
-        bool result = await _service.Delete(id, cancellationToken);
+        await _service.Delete(id, cancellationToken);
 
         return Ok();
     }

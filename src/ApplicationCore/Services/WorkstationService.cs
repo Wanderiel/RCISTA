@@ -43,13 +43,11 @@ public class WorkstationService
     public async Task<WorkstationResponse?> Get(int id, CancellationToken cancellationToken = default) =>
         (await GetWorkstation(id, cancellationToken))?.ToDto();
 
-    public async Task<bool> Delete(int id, CancellationToken cancellationToken = default)
+    public async Task Delete(int id, CancellationToken cancellationToken = default)
     {
         Workstation? workstation = await GetWorkstation(id, cancellationToken);
         workstation.WriteOff();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        return true;
     }
 
     public async Task CreateTask(TaskRequest taskDto, CancellationToken cancellationToken = default)

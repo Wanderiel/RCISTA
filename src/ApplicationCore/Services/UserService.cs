@@ -21,13 +21,11 @@ public class UserService
     public async Task<User> Get(int id, CancellationToken cancellationToken = default) =>
         await GetUser(id, cancellationToken);
 
-    public async Task<bool> Delete(int id, CancellationToken cancellationToken = default)
+    public async Task Delete(int id, CancellationToken cancellationToken = default)
     {
         User user = await GetUser(id, cancellationToken);
         user.Block();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        return true;
     }
 
     private async Task<User> GetUser(int id, CancellationToken cancellationToken)

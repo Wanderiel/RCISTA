@@ -42,22 +42,18 @@ public class NonPaperMediaService : INonPaperMediaService
         (await GetNonPaperMedia(id, cancellationToken))?.ToDto();
 
     //TODO сломано, починить
-    public async Task<bool> Update(int id, UpdatedNPMDto npmDto, CancellationToken cancellationToken = default)
+    public async Task Update(int id, UpdatedNPMDto npmDto, CancellationToken cancellationToken = default)
     {
         NonPaperMedia nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
         //UpdateNonPaperMedia(nonPaperMedia, npmDto);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        return true;
     }
 
-    public async Task<bool> Delete(int id, CancellationToken cancellationToken = default)
+    public async Task Delete(int id, CancellationToken cancellationToken = default)
     {
         NonPaperMedia nonPaperMedia = await GetNonPaperMedia(id, cancellationToken);
         nonPaperMedia.ToBreak();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        return true;
     }
 
     public async Task<bool> IsAvailable(NpmId id, CancellationToken cancellationToken = default) =>

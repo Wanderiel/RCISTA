@@ -9,5 +9,5 @@ public interface INonPaperMediaRepository
     Task<NonPaperMedia?> GetById(NpmId id, CancellationToken cancellationToken = default);
     Task<List<NonPaperMedia>> GetByIds(IEnumerable<NpmId> ids, CancellationToken cancellationToken = default);
     Task<bool> IsAvailable(NpmId id, CancellationToken cancellationToken = default);
-    Task<bool> HasNpmBySerialnumber(string serialnumber, CancellationToken cancellationToken);
+    Task<bool> HasNpmBySerialnumber(string serialnumber, CancellationToken cancellationToken = default);
 }
