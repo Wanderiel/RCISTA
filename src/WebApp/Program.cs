@@ -5,6 +5,7 @@ using Infrastructure.Contexts;
 using Infrastructure.Repositories;
 using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Handling;
 using WebApp.Validators;
 
 const string PROFILE_LOCAL = "local";
@@ -13,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddLogging();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddSwaggerGen();
 
 if (builder.Environment.EnvironmentName == PROFILE_LOCAL)
@@ -48,10 +51,9 @@ if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == PROFIL
     app.UseSwagger();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
